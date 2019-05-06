@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -23,12 +25,36 @@ android {
 }
 
 dependencies {
+    def androidx_version = '1.1.0-alpha04'
+    def retrofit_version = '2.5.0'
+    def glide_version = '4.9.0'
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api 'com.google.android.material:material:1.1.0-alpha06'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core-ktx:1.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.annotation:annotation:$androidx_version"
+    implementation "androidx.recyclerview:recyclerview:$androidx_version"
+
+    // RXJava2 and RXAndroid
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+
+    // Retrofit 2 library for Networking Call @ http://square.github.io/retrofit/
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    // Material Drawer
+    implementation 'co.zsmb:materialdrawer-kt:2.0.1'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

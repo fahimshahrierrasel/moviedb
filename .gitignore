@@ -13,3 +13,5 @@
 .externalNativeBuild
 
 \.idea/codeStyles/codeStyleConfig\.xml
+
+\.idea/codeStyles/
