@@ -34,7 +34,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/tv_movie_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
@@ -85,6 +85,7 @@
                             app:srcCompat="@drawable/ic_check_black_24dp" />
 
                         <TextView
+                            android:id="@+id/tv_movie_status"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -106,6 +107,7 @@
                             app:srcCompat="@drawable/ic_today_black_24dp" />
 
                         <TextView
+                            android:id="@+id/tv_movie_release_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -127,6 +129,7 @@
                             app:srcCompat="@drawable/ic_language_black_24dp" />
 
                         <TextView
+                            android:id="@+id/tv_movie_language"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -148,6 +151,7 @@
                             app:srcCompat="@drawable/ic_movie_black_24dp" />
 
                         <TextView
+                            android:id="@+id/tv_movie_runtime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -169,6 +173,7 @@
                             app:srcCompat="@drawable/ic_monetization_on_black_24dp" />
 
                         <TextView
+                            android:id="@+id/tv_movie_budget"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -190,6 +195,7 @@
                             app:srcCompat="@drawable/ic_trending_up_black_24dp" />
 
                         <TextView
+                            android:id="@+id/tv_movie_revenue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -232,6 +238,8 @@
                     android:id="@+id/rv_casts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
+                    tools:itemCount="1"
                     tools:listitem="@layout/item_cast" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
+import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
 import kotlinx.android.synthetic.main.fragment_popular.*
 
@@ -18,6 +19,7 @@ class PopularFragment : Fragment(), PopularContract.View {
     private lateinit var popularPresenter: PopularContract.Presenter
     private lateinit var movieAdapter: MovieAdapter
     private val movieResults = ArrayList<MovieResult>()
+    private lateinit var rootActivity: MainActivity
 
     companion object {
         fun newInstance(bundle: Bundle) = PopularFragment().apply {
@@ -26,6 +28,7 @@ class PopularFragment : Fragment(), PopularContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        rootActivity = activity as MainActivity
         return inflater.inflate(R.layout.fragment_popular, container, false)
     }
 
@@ -34,8 +37,8 @@ class PopularFragment : Fragment(), PopularContract.View {
         rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         movieAdapter = MovieAdapter(movieResults)
         rv_movies.adapter = movieAdapter
-        movieAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, v, position ->
-            Toast.makeText(v.context, movieResults[position].title, Toast.LENGTH_LONG).show()
+        movieAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, v, position ->
+            rootActivity.openMovieDetails(movieResults[position].id)
         }
     }
 

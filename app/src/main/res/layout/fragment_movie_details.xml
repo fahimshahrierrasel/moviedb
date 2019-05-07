@@ -19,11 +19,12 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    app:layout_collapseMode="parallax"
-                    app:srcCompat="@drawable/endgame_background"/>
+                android:id="@+id/iv_movie_backdrop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:srcCompat="@drawable/endgame_background" />
 
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/AppBar"

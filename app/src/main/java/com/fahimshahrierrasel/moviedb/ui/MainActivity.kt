@@ -6,6 +6,10 @@ import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
+import com.fahimshahrierrasel.moviedb.data.model.Movie
+import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
+import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsFragment
+import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsPresenter
 import com.fahimshahrierrasel.moviedb.ui.popular.PopularFragment
 import com.fahimshahrierrasel.moviedb.ui.popular.PopularPresenter
 import com.orhanobut.logger.AndroidLogAdapter
@@ -37,5 +41,16 @@ class MainActivity : AppCompatActivity() {
         }.commit()
 
         PopularPresenter(popularFragment)
+    }
+
+    fun openMovieDetails(movieId: Int) {
+        val bundle = Bundle()
+        bundle.putInt(MOVIE_ID, movieId)
+        val movieDetailsFragment = MovieDetailsFragment.newInstance(bundle)
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_fragment_placeholder, movieDetailsFragment)
+            addToBackStack(null)
+        }.commit()
+        MovieDetailsPresenter(movieDetailsFragment)
     }
 }
