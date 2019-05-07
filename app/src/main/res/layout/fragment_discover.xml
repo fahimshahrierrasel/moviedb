@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="@string/app_name"
+        app:titleTextColor="@color/md_white_1000" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_movie_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="Search Here"
+                    android:inputType="textCapWords"
+                    android:padding="15dp"
+                    android:singleLine="true" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_search"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Search" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_show_hide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    app:srcCompat="@drawable/ic_history_black_24dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_advance_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Year" />
+
+                    <Spinner
+                        android:id="@+id/spinner_year"
+                        style="@android:style/Widget.Holo.Light.Spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:spinnerMode="dialog" />
+
+                    <TextView
+                        android:id="@+id/tv_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rating" />
+
+                    <io.apptik.widget.MultiSlider
+                        android:id="@+id/rs_rating"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        app:scaleMax="10"
+                        app:scaleMin="0"
+                        app:scaleStep="1"
+                        app:thumbNumber="2" />
+
+                    <TextView
+                        android:id="@+id/tv_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Duration" />
+
+                    <io.apptik.widget.MultiSlider
+                        android:id="@+id/rs_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        app:scaleMax="500"
+                        app:scaleMin="0"
+                        app:scaleStep="5"
+                        app:thumbNumber="2" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_advance_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Advance Search" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_movies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_movie" />
+
+
+</LinearLayout>

@@ -13,6 +13,8 @@ import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
 import com.fahimshahrierrasel.moviedb.helper.GENRE_NAME
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
+import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverFragment
+import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverPresenter
 import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
 import com.fahimshahrierrasel.moviedb.ui.genres.GenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsFragment
@@ -54,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             primaryItem("Discover") {
                 icon = R.drawable.ic_movie_filter_black_24dp
                 onClick { _ ->
-                    //openMovieList("discover")
+                    openDiscoverFragment()
                     false
                 }
             }
@@ -96,8 +98,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        openMovieList()
+//        openMovieList()
+        openDiscoverFragment()
     }
+
 
     private fun openMovieList(keyword: String = "popular") {
         val bundle = Bundle()
@@ -118,6 +122,15 @@ class MainActivity : AppCompatActivity() {
         }.commit()
 
         GenrePresenter(genreFragment)
+    }
+
+    private fun openDiscoverFragment() {
+        val discoverFragment = DiscoverFragment.newInstance(Bundle())
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_fragment_placeholder, discoverFragment)
+        }.commit()
+
+        DiscoverPresenter(discoverFragment)
     }
 
     fun openMovieDetails(movieId: Int) {
