@@ -1,4 +1,4 @@
-package com.fahimshahrierrasel.moviedb.ui.popular
+package com.fahimshahrierrasel.moviedb.ui.movie_list
 
 import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
 import com.fahimshahrierrasel.moviedb.data.model.MovieList
@@ -10,20 +10,20 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class PopularPresenter(private val popularView: PopularContract.View) : PopularContract.Presenter {
+class MovieListPresenter(private val movieListView: MovieListContract.View) : MovieListContract.Presenter {
     init {
-        popularView.setPresenter(this)
+        movieListView.setPresenter(this)
     }
 
     private val compositeDisposable = CompositeDisposable()
 
-    override fun getPopularMovies() {
-        ApiUtils.movieDBService.requestForPopularMovies(apiKey)
+    override fun getMovieList(keyword: String) {
+        ApiUtils.movieDBService.requestForMovieList(keyword, apiKey)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<MovieList> {
                 override fun onSuccess(t: MovieList) {
-                    popularView.populateMovieRecyclerView(t.movieResults)
+                    movieListView.populateMovieRecyclerView(t.movieResults)
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -40,6 +40,6 @@ class PopularPresenter(private val popularView: PopularContract.View) : PopularC
 
 
     override fun start() {
-        getPopularMovies()
+        movieListView.findMovieKeyword()
     }
 }

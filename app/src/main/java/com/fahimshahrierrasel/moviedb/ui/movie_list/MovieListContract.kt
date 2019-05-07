@@ -1,15 +1,16 @@
-package com.fahimshahrierrasel.moviedb.ui.popular
+package com.fahimshahrierrasel.moviedb.ui.movie_list
 
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
 import com.fahimshahrierrasel.moviedb.ui.BasePresenter
 import com.fahimshahrierrasel.moviedb.ui.BaseView
 
-interface PopularContract {
+interface MovieListContract {
     interface Presenter : BasePresenter {
-        fun getPopularMovies()
+        fun getMovieList(keyword: String="popular")
     }
 
     interface View : BaseView<Presenter> {
+        fun findMovieKeyword()
         fun populateMovieRecyclerView(movieResults: List<MovieResult>)
     }
 }

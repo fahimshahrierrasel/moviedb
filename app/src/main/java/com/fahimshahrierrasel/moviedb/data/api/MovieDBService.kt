@@ -15,8 +15,9 @@ interface MovieDBService {
         @Query("api_key") apiKey: String
     ): Single<MovieGenre>
 
-    @GET("movie/popular")
-    fun requestForPopularMovies(
+    @GET("movie/{keyword}")
+    fun requestForMovieList(
+        @Path("keyword") keyword: String,
         @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
     ): Single<MovieList>

@@ -8,12 +8,15 @@ import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
+import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
 import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
 import com.fahimshahrierrasel.moviedb.ui.genres.GenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsPresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
+import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListFragment
+import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListPresenter
 import com.mikepenz.materialize.MaterializeBuilder
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -28,29 +31,46 @@ class MainActivity : AppCompatActivity() {
         Logger.addLogAdapter(AndroidLogAdapter())
 
         drawer {
-            primaryItem("Popular") {}
-            primaryItem("Discover") {}
-            primaryItem("Upcoming") {}
-            primaryItem("Now Playing") {}
-            primaryItem("Top Rated") {}
-            primaryItem("Person") {}
+            primaryItem("Popular") {
+                icon = R.drawable.ic_stars_black_24dp
+            }
+            primaryItem("Discover") {
+                icon = R.drawable.ic_movie_filter_black_24dp
+            }
+            primaryItem("Upcoming") {
+                icon = R.drawable.ic_history_black_24dp
+            }
+            primaryItem("Now Playing") {
+                icon = R.drawable.ic_local_play_black_24dp
+            }
+            primaryItem("Top Rated") {
+                icon = R.drawable.ic_whatshot_black_24dp
+            }
+            primaryItem("Person") {
+                icon = R.drawable.ic_person_black_24dp
+            }
             divider {}
-            primaryItem("About") {}
+            primaryItem("About") {
+                icon = R.drawable.ic_info_black_24dp
+            }
         }
 
-//        val popularFragment = PopularFragment.newInstance(Bundle())
-//        supportFragmentManager.beginTransaction().apply {
-//            replace(R.id.main_fragment_placeholder, popularFragment)
-//        }.commit()
-//
-//        PopularPresenter(popularFragment)
+        val bundle = Bundle()
+        bundle.putString(MOVIE_KEYWORD, "top_rated")
 
-        val genreFragment = GenreFragment.newInstance(Bundle())
+        val popularFragment = MovieListFragment.newInstance(bundle)
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_fragment_placeholder, genreFragment)
+            replace(R.id.main_fragment_placeholder, popularFragment)
         }.commit()
 
-        GenrePresenter(genreFragment)
+        MovieListPresenter(popularFragment)
+
+//        val genreFragment = GenreFragment.newInstance(Bundle())
+//        supportFragmentManager.beginTransaction().apply {
+//            replace(R.id.main_fragment_placeholder, genreFragment)
+//        }.commit()
+//
+//        GenrePresenter(genreFragment)
     }
 
     fun openMovieDetails(movieId: Int) {

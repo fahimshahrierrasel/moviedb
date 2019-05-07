@@ -1,36 +1,36 @@
-package com.fahimshahrierrasel.moviedb.ui.popular
+package com.fahimshahrierrasel.moviedb.ui.movie_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
-import com.fahimshahrierrasel.moviedb.helper.Tools
+import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
-import kotlinx.android.synthetic.main.fragment_popular.*
+import kotlinx.android.synthetic.main.fragment_movie_list.*
 
-class PopularFragment : Fragment(), PopularContract.View {
-    private lateinit var popularPresenter: PopularContract.Presenter
+class MovieListFragment : Fragment(), MovieListContract.View {
+
+    private lateinit var movieListPresenter: MovieListContract.Presenter
     private lateinit var movieAdapter: MovieAdapter
     private val movieResults = ArrayList<MovieResult>()
     private lateinit var rootActivity: MainActivity
 
     companion object {
-        fun newInstance(bundle: Bundle) = PopularFragment().apply {
+        fun newInstance(bundle: Bundle) = MovieListFragment().apply {
             arguments = bundle
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootActivity = activity as MainActivity
-        return inflater.inflate(R.layout.fragment_popular, container, false)
+        return inflater.inflate(R.layout.fragment_movie_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,12 +48,23 @@ class PopularFragment : Fragment(), PopularContract.View {
         movieAdapter.notifyDataSetChanged()
     }
 
-    override fun onStart() {
-        super.onStart()
-        popularPresenter.start()
+    override fun findMovieKeyword() {
+        val movieKeyword = arguments?.getString(MOVIE_KEYWORD, "popular")
+        movieKeyword?.apply {
+            movieListPresenter.getMovieList(this)
+        }.also {
+            it!!.replace("_", " ").toUpperCase().apply {
+                toolbar.title = "$this MOVIES"
+            }
+        }
     }
 
-    override fun setPresenter(presenter: PopularContract.Presenter) {
-        popularPresenter = presenter
+    override fun onStart() {
+        super.onStart()
+        movieListPresenter.start()
+    }
+
+    override fun setPresenter(presenter: MovieListContract.Presenter) {
+        movieListPresenter = presenter
     }
 }

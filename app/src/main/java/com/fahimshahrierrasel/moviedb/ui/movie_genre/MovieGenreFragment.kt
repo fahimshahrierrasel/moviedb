@@ -13,7 +13,7 @@ import com.fahimshahrierrasel.moviedb.data.model.MovieResult
 import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
-import kotlinx.android.synthetic.main.fragment_popular.*
+import kotlinx.android.synthetic.main.fragment_movie_list.*
 
 class MovieGenreFragment : Fragment(), MovieGenreContract.View {
 
@@ -30,7 +30,7 @@ class MovieGenreFragment : Fragment(), MovieGenreContract.View {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootActivity = activity as MainActivity
-        return inflater.inflate(R.layout.fragment_popular, container, false)
+        return inflater.inflate(R.layout.fragment_movie_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -16,7 +16,7 @@ import com.fahimshahrierrasel.moviedb.helper.Tools
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.GenreAdapter
 import kotlinx.android.synthetic.main.fragment_genres.*
-import kotlinx.android.synthetic.main.fragment_popular.*
+import kotlinx.android.synthetic.main.fragment_movie_list.*
 
 class GenreFragment : Fragment(), GenreContract.View {
     private lateinit var genrePresenter: GenreContract.Presenter

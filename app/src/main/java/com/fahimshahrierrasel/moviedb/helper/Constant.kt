@@ -14,3 +14,4 @@ const val castProfilePrefix = "https://image.tmdb.org/t/p/w276_and_h350_face"
 // Key Constant
 const val MOVIE_ID = "MOVIE_ID"
 const val GENRE_ID = "GENRE_ID"
+const val MOVIE_KEYWORD = "MOVIE_KEYWORD"
