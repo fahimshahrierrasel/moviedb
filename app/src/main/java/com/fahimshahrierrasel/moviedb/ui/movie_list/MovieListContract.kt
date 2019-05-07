@@ -11,6 +11,7 @@ interface MovieListContract {
 
     interface View : BaseView<Presenter> {
         fun findMovieKeyword()
+        fun setDrawer()
         fun populateMovieRecyclerView(movieResults: List<MovieResult>)
     }
 }

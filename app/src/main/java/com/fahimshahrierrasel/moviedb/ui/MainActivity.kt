@@ -2,11 +2,15 @@ package com.fahimshahrierrasel.moviedb.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import co.zsmb.materialdrawerkt.builders.DrawerBuilderKt
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
+import com.fahimshahrierrasel.moviedb.data.model.Genre
 import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
+import com.fahimshahrierrasel.moviedb.helper.GENRE_NAME
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
 import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
@@ -17,12 +21,14 @@ import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListPresenter
-import com.mikepenz.materialize.MaterializeBuilder
+import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var myDrawer: Drawer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,33 +36,72 @@ class MainActivity : AppCompatActivity() {
 
         Logger.addLogAdapter(AndroidLogAdapter())
 
-        drawer {
+        myDrawer = drawer {
+            primaryItem("Genres") {
+                icon = R.drawable.ic_library_books_black_24dp
+                onClick { _ ->
+                    openGenreFragment()
+                    false
+                }
+            }
             primaryItem("Popular") {
                 icon = R.drawable.ic_stars_black_24dp
+                onClick { _ ->
+                    openMovieList()
+                    false
+                }
             }
             primaryItem("Discover") {
                 icon = R.drawable.ic_movie_filter_black_24dp
+                onClick { _ ->
+                    //openMovieList("discover")
+                    false
+                }
             }
             primaryItem("Upcoming") {
                 icon = R.drawable.ic_history_black_24dp
+                onClick { _ ->
+                    openMovieList("upcoming")
+                    false
+                }
             }
             primaryItem("Now Playing") {
                 icon = R.drawable.ic_local_play_black_24dp
+                onClick { _ ->
+                    openMovieList("now_playing")
+                    false
+                }
             }
             primaryItem("Top Rated") {
                 icon = R.drawable.ic_whatshot_black_24dp
+                onClick { _ ->
+                    openMovieList("top_rated")
+                    false
+                }
             }
             primaryItem("Person") {
                 icon = R.drawable.ic_person_black_24dp
+                onClick { _ ->
+
+                    false
+                }
             }
             divider {}
             primaryItem("About") {
                 icon = R.drawable.ic_info_black_24dp
+                onClick { _ ->
+
+                    false
+                }
             }
         }
 
+        openMovieList()
+    }
+
+    private fun openMovieList(keyword: String = "popular") {
         val bundle = Bundle()
-        bundle.putString(MOVIE_KEYWORD, "top_rated")
+        bundle.putString(MOVIE_KEYWORD, keyword)
 
         val popularFragment = MovieListFragment.newInstance(bundle)
         supportFragmentManager.beginTransaction().apply {
@@ -64,13 +109,15 @@ class MainActivity : AppCompatActivity() {
         }.commit()
 
         MovieListPresenter(popularFragment)
+    }
 
-//        val genreFragment = GenreFragment.newInstance(Bundle())
-//        supportFragmentManager.beginTransaction().apply {
-//            replace(R.id.main_fragment_placeholder, genreFragment)
-//        }.commit()
-//
-//        GenrePresenter(genreFragment)
+    private fun openGenreFragment() {
+        val genreFragment = GenreFragment.newInstance(Bundle())
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_fragment_placeholder, genreFragment)
+        }.commit()
+
+        GenrePresenter(genreFragment)
     }
 
     fun openMovieDetails(movieId: Int) {
@@ -84,9 +131,10 @@ class MainActivity : AppCompatActivity() {
         MovieDetailsPresenter(movieDetailsFragment)
     }
 
-    fun openGenreMovies(genre_id: Int) {
+    fun openGenreMovies(genre: Genre) {
         val bundle = Bundle()
-        bundle.putInt(GENRE_ID, genre_id)
+        bundle.putInt(GENRE_ID, genre.id)
+        bundle.putString(GENRE_NAME, genre.name)
         val movieGenreFragment = MovieGenreFragment.newInstance(bundle)
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, movieGenreFragment)

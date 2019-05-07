@@ -30,11 +30,13 @@ class MovieListFragment : Fragment(), MovieListContract.View {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootActivity = activity as MainActivity
+
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         movieAdapter = MovieAdapter(movieResults)
         rv_movies.adapter = movieAdapter
@@ -57,6 +59,10 @@ class MovieListFragment : Fragment(), MovieListContract.View {
                 toolbar.title = "$this MOVIES"
             }
         }
+    }
+
+    override fun setDrawer() {
+//        rootActivity.setHamburger(toolbar)
     }
 
     override fun onStart() {

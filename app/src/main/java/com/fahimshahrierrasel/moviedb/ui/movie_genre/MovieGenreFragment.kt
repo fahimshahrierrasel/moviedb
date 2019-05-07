@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
 import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
+import com.fahimshahrierrasel.moviedb.helper.GENRE_NAME
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
 import kotlinx.android.synthetic.main.fragment_movie_list.*
@@ -35,6 +36,11 @@ class MovieGenreFragment : Fragment(), MovieGenreContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.getString(GENRE_NAME, "Movies").apply {
+            toolbar.title = this?.capitalize()
+        }
+
         rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         movieAdapter = MovieAdapter(movieResults)
         rv_movies.adapter = movieAdapter

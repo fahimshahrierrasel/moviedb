@@ -40,6 +40,7 @@ class MovieListPresenter(private val movieListView: MovieListContract.View) : Mo
 
 
     override fun start() {
+        movieListView.setDrawer()
         movieListView.findMovieKeyword()
     }
 }

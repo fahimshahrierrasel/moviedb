@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.Genre
@@ -16,7 +14,6 @@ import com.fahimshahrierrasel.moviedb.helper.Tools
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.GenreAdapter
 import kotlinx.android.synthetic.main.fragment_genres.*
-import kotlinx.android.synthetic.main.fragment_movie_list.*
 
 class GenreFragment : Fragment(), GenreContract.View {
     private lateinit var genrePresenter: GenreContract.Presenter
@@ -37,6 +34,9 @@ class GenreFragment : Fragment(), GenreContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar.title = "Movie Genres"
+
         rv_genres.layoutManager = GridLayoutManager(rootActivity, 2)
         rv_genres.addItemDecoration(
             SpacingItemDecoration(
@@ -50,7 +50,7 @@ class GenreFragment : Fragment(), GenreContract.View {
         genreAdapter = GenreAdapter(genres)
         rv_genres.adapter = genreAdapter
         genreAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
-            rootActivity.openGenreMovies(genres[position].id)
+            rootActivity.openGenreMovies(genres[position])
         }
     }
 
