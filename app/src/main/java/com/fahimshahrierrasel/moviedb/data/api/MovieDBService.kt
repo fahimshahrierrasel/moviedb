@@ -32,4 +32,11 @@ interface MovieDBService {
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
     ): Single<Credit>
+
+    @GET("genre/{genre_id}/movies")
+    fun requestForGenreMovies(
+        @Path("genre_id") genreId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int = 1
+    ): Single<MovieList>
 }

@@ -1,29 +1,29 @@
-package com.fahimshahrierrasel.moviedb.ui.popular
+package com.fahimshahrierrasel.moviedb.ui.movie_genre
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
-import com.fahimshahrierrasel.moviedb.helper.Tools
+import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
 import kotlinx.android.synthetic.main.fragment_popular.*
 
-class PopularFragment : Fragment(), PopularContract.View {
-    private lateinit var popularPresenter: PopularContract.Presenter
+class MovieGenreFragment : Fragment(), MovieGenreContract.View {
+
+    private lateinit var movieGenrePresenter: MovieGenreContract.Presenter
     private lateinit var movieAdapter: MovieAdapter
     private val movieResults = ArrayList<MovieResult>()
     private lateinit var rootActivity: MainActivity
 
     companion object {
-        fun newInstance(bundle: Bundle) = PopularFragment().apply {
+        fun newInstance(bundle: Bundle) = MovieGenreFragment().apply {
             arguments = bundle
         }
     }
@@ -48,12 +48,17 @@ class PopularFragment : Fragment(), PopularContract.View {
         movieAdapter.notifyDataSetChanged()
     }
 
-    override fun onStart() {
-        super.onStart()
-        popularPresenter.start()
+    override fun findGenreId() {
+        val movieId = arguments?.getInt(GENRE_ID)
+        movieGenrePresenter.getSameGenreMovies(movieId!!)
     }
 
-    override fun setPresenter(presenter: PopularContract.Presenter) {
-        popularPresenter = presenter
+    override fun onStart() {
+        super.onStart()
+        movieGenrePresenter.start()
+    }
+
+    override fun setPresenter(presenter: MovieGenreContract.Presenter) {
+        movieGenrePresenter = presenter
     }
 }

@@ -1,5 +1,6 @@
 package com.fahimshahrierrasel.moviedb.ui.movie_details
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.fahimshahrierrasel.moviedb.data.model.Credit
 import com.fahimshahrierrasel.moviedb.data.model.Movie
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
 import com.fahimshahrierrasel.moviedb.helper.backdropPrefix
+import com.fahimshahrierrasel.moviedb.helper.posterPrefix
 import com.fahimshahrierrasel.moviedb.ui.adapters.CastAdapter
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.content_movie.*
@@ -52,6 +54,13 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
             .load("$backdropPrefix${movie.backdropPath}")
             .into(iv_movie_backdrop)
 
+        Glide.with(context!!)
+            .load("$posterPrefix${movie.posterPath}")
+            .into(iv_movie_poster)
+
+        toolbar.title = movie.title
+        toolbar.setTitleTextColor(Color.WHITE)
+
         tv_movie_overview.text = movie.overview
         tv_movie_status.text = movie.status
         tv_movie_release_date.text = movie.releaseDate
@@ -62,7 +71,10 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
     }
 
     override fun populateCredits(credit: Credit) {
-        casts.addAll(credit.cast.subList(0, 10))
+        if (credit.cast.size > 10)
+            casts.addAll(credit.cast.subList(0, 10))
+        else
+            casts.addAll(credit.cast)
         castAdapter.notifyDataSetChanged()
     }
 

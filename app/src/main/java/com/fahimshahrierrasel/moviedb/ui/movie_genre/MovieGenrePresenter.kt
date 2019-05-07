@@ -1,4 +1,4 @@
-package com.fahimshahrierrasel.moviedb.ui.popular
+package com.fahimshahrierrasel.moviedb.ui.movie_genre
 
 import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
 import com.fahimshahrierrasel.moviedb.data.model.MovieList
@@ -10,20 +10,20 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class PopularPresenter(private val popularView: PopularContract.View) : PopularContract.Presenter {
+class MovieGenrePresenter(private val movieGenreView: MovieGenreContract.View) : MovieGenreContract.Presenter {
     init {
-        popularView.setPresenter(this)
+        movieGenreView.setPresenter(this)
     }
 
     private val compositeDisposable = CompositeDisposable()
 
-    override fun getPopularMovies() {
-        ApiUtils.movieDBService.requestForPopularMovies(apiKey)
+    override fun getSameGenreMovies(genreId: Int) {
+        ApiUtils.movieDBService.requestForGenreMovies(genreId, apiKey)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<MovieList> {
                 override fun onSuccess(t: MovieList) {
-                    popularView.populateMovieRecyclerView(t.movieResults)
+                    movieGenreView.populateMovieRecyclerView(t.movieResults)
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -40,6 +40,6 @@ class PopularPresenter(private val popularView: PopularContract.View) : PopularC
 
 
     override fun start() {
-        getPopularMovies()
+        movieGenreView.findGenreId()
     }
 }
