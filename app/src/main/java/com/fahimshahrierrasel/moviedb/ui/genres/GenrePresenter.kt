@@ -24,6 +24,7 @@ class GenrePresenter(private val genreView: GenreContract.View) : GenreContract.
             .subscribe(object : SingleObserver<MovieGenre> {
                 override fun onSuccess(t: MovieGenre) {
                     genreView.populateGenreRecyclerView(t.genres)
+                    genreView.hideProgressView()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -32,6 +33,7 @@ class GenrePresenter(private val genreView: GenreContract.View) : GenreContract.
 
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
+                    genreView.hideProgressView()
                 }
 
             })
@@ -41,5 +43,6 @@ class GenrePresenter(private val genreView: GenreContract.View) : GenreContract.
 
     override fun start() {
         getAllGenres()
+        genreView.showProgressView()
     }
 }

@@ -40,6 +40,14 @@ class AboutFragment : Fragment(), AboutContract.View {
 
     }
 
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
+    }
+
     override fun onStart() {
         super.onStart()
         genrePresenter.start()

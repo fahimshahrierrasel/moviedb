@@ -49,6 +49,14 @@ class MovieGenreFragment : Fragment(), MovieGenreContract.View {
         }
     }
 
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
+    }
+
     override fun populateMovieRecyclerView(movieResults: List<MovieResult>) {
         this.movieResults.addAll(movieResults)
         movieAdapter.notifyDataSetChanged()

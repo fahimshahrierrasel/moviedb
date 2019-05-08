@@ -101,6 +101,14 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
         }
     }
 
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
+    }
+
     override fun showInputWarning(message: String) {
         Toast.makeText(rootActivity, message, Toast.LENGTH_LONG).show()
     }

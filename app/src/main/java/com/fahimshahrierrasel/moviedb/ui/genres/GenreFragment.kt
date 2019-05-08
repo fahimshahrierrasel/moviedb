@@ -54,6 +54,14 @@ class GenreFragment : Fragment(), GenreContract.View {
         }
     }
 
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
+    }
+
     override fun populateGenreRecyclerView(genres: List<Genre>) {
         this.genres.addAll(genres)
         genreAdapter.notifyDataSetChanged()

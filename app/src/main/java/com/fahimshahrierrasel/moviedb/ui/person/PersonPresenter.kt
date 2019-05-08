@@ -24,6 +24,7 @@ class PersonPresenter(private val personView: PersonContract.View) : PersonContr
             .subscribe(object : SingleObserver<PersonResponse> {
                 override fun onSuccess(t: PersonResponse) {
                     personView.populatePersonRecyclerView(t.results)
+                    personView.hideProgressView()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -32,6 +33,7 @@ class PersonPresenter(private val personView: PersonContract.View) : PersonContr
 
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
+                    personView.hideProgressView()
                 }
 
             })
@@ -41,5 +43,6 @@ class PersonPresenter(private val personView: PersonContract.View) : PersonContr
 
     override fun start() {
         getAllPerson()
+        personView.showProgressView()
     }
 }

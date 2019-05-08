@@ -33,6 +33,7 @@ import com.orhanobut.logger.Logger
 class MainActivity : AppCompatActivity() {
 
     private lateinit var myDrawer: Drawer
+    val progressView by lazy { MovieDBProgressDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,6 +106,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun openMovieList(keyword: String = "popular") {
+
         val bundle = Bundle()
         bundle.putString(MOVIE_KEYWORD, keyword)
 

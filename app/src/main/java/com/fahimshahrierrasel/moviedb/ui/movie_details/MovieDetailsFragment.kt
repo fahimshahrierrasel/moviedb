@@ -16,6 +16,7 @@ import com.fahimshahrierrasel.moviedb.data.model.Movie
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
 import com.fahimshahrierrasel.moviedb.helper.backdropPrefix
 import com.fahimshahrierrasel.moviedb.helper.posterPrefix
+import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.CastAdapter
 import kotlinx.android.synthetic.main.content_movie.*
 import kotlinx.android.synthetic.main.fragment_movie_details.*
@@ -25,6 +26,7 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
     private lateinit var movieDetailsPresenter: MovieDetailsContract.Presenter
     private lateinit var castAdapter: CastAdapter
     private val casts = ArrayList<CreditCast>()
+    private lateinit var rootActivity: MainActivity
 
     companion object {
         fun newInstance(bundle: Bundle) = MovieDetailsFragment().apply {
@@ -33,6 +35,7 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        rootActivity = activity as MainActivity
         return inflater.inflate(R.layout.fragment_movie_details, container, false)
     }
 
@@ -41,6 +44,14 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
         rv_casts.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         castAdapter = CastAdapter(casts)
         rv_casts.adapter = castAdapter
+    }
+
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
     }
 
     override fun findMovieId() {

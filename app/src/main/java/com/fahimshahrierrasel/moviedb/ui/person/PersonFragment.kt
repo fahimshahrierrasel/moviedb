@@ -55,6 +55,14 @@ class PersonFragment : Fragment(), PersonContract.View {
         }
     }
 
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
+    }
+
     override fun populatePersonRecyclerView(personResults: List<PersonResult>) {
         this.personResults.addAll(personResults)
         personAdapter.notifyDataSetChanged()

@@ -11,6 +11,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class DiscoverPresenter(private val discoverView: DiscoverContract.View) : DiscoverContract.Presenter {
+    init {
+        discoverView.setPresenter(this)
+    }
+
     private val compositeDisposable = CompositeDisposable()
 
     override fun getDiscoverMovies(
@@ -37,6 +41,8 @@ class DiscoverPresenter(private val discoverView: DiscoverContract.View) : Disco
                         discoverView.addDiscoveredMovies(t.movieResults)
                     else
                         discoverView.appendDiscoveredMovies(t.movieResults)
+
+                    discoverView.hideProgressView()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -45,6 +51,7 @@ class DiscoverPresenter(private val discoverView: DiscoverContract.View) : Disco
 
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
+                    discoverView.hideProgressView()
                 }
 
             })
@@ -60,6 +67,8 @@ class DiscoverPresenter(private val discoverView: DiscoverContract.View) : Disco
                         discoverView.addDiscoveredMovies(t.movieResults)
                     else
                         discoverView.appendDiscoveredMovies(t.movieResults)
+
+                    discoverView.hideProgressView()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -68,6 +77,7 @@ class DiscoverPresenter(private val discoverView: DiscoverContract.View) : Disco
 
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
+                    discoverView.hideProgressView()
                 }
 
             })
@@ -76,19 +86,19 @@ class DiscoverPresenter(private val discoverView: DiscoverContract.View) : Disco
     override fun searchMovies(query: String) {
         if (query.isEmpty())
             discoverView.showInputWarning("Please input something to search!!")
-        else
+        else {
+            discoverView.showProgressView()
             getSearchedMovies(query)
+        }
     }
 
     override fun discoverMovies(releaseYear: Int, voteGte: Int, voteLte: Int, runtimeGte: Int, runtimeLte: Int) {
+        discoverView.showProgressView()
         getDiscoverMovies(releaseYear, voteGte, voteLte, runtimeGte, runtimeLte)
-    }
-
-    init {
-        discoverView.setPresenter(this)
     }
 
     override fun start() {
         getDiscoverMovies()
+        discoverView.showProgressView()
     }
 }

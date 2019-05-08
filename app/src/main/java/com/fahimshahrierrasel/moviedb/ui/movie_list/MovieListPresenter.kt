@@ -24,6 +24,7 @@ class MovieListPresenter(private val movieListView: MovieListContract.View) : Mo
             .subscribe(object : SingleObserver<MovieList> {
                 override fun onSuccess(t: MovieList) {
                     movieListView.populateMovieRecyclerView(t.movieResults)
+                    movieListView.hideProgressView()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -32,6 +33,7 @@ class MovieListPresenter(private val movieListView: MovieListContract.View) : Mo
 
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
+                    movieListView.hideProgressView()
                 }
 
             })
@@ -40,7 +42,7 @@ class MovieListPresenter(private val movieListView: MovieListContract.View) : Mo
 
 
     override fun start() {
-        movieListView.setDrawer()
         movieListView.findMovieKeyword()
+        movieListView.showProgressView()
     }
 }

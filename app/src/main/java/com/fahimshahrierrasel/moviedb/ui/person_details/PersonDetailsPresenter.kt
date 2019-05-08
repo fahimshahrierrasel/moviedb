@@ -28,8 +28,8 @@ class PersonDetailsPresenter(private val personDetailsView: PersonDetailsContrac
             .subscribe(object : SingleObserver<Person> {
                 override fun onSuccess(t: Person) {
                     personDetailsView.populatePersonDetails(t)
-                    Logger.d(t.id)
                     getKnownMovies(t.id)
+                    personDetailsView.hideProgressView()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -38,6 +38,7 @@ class PersonDetailsPresenter(private val personDetailsView: PersonDetailsContrac
 
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
+                    personDetailsView.hideProgressView()
                 }
 
             })
@@ -65,6 +66,7 @@ class PersonDetailsPresenter(private val personDetailsView: PersonDetailsContrac
 
     override fun start() {
         personDetailsView.findPersonId()
+        personDetailsView.showProgressView()
     }
 
 }

@@ -48,6 +48,7 @@ class MovieDetailsPresenter(private val movieDetailView: MovieDetailsContract.Vi
             .subscribe(object : SingleObserver<CreditResponse> {
                 override fun onSuccess(t: CreditResponse) {
                     movieDetailView.populateCredits(t)
+                    movieDetailView.hideProgressView()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -56,6 +57,7 @@ class MovieDetailsPresenter(private val movieDetailView: MovieDetailsContract.Vi
 
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
+                    movieDetailView.hideProgressView()
                 }
 
             })
@@ -63,6 +65,7 @@ class MovieDetailsPresenter(private val movieDetailView: MovieDetailsContract.Vi
 
     override fun start() {
         movieDetailView.findMovieId()
+        movieDetailView.showProgressView()
     }
 
 }

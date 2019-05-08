@@ -45,6 +45,14 @@ class MovieListFragment : Fragment(), MovieListContract.View {
         }
     }
 
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
+    }
+
     override fun populateMovieRecyclerView(movieResults: List<MovieResult>) {
         this.movieResults.addAll(movieResults)
         movieAdapter.notifyDataSetChanged()
@@ -59,10 +67,6 @@ class MovieListFragment : Fragment(), MovieListContract.View {
                 toolbar.title = "$this MOVIES"
             }
         }
-    }
-
-    override fun setDrawer() {
-//        rootActivity.setHamburger(toolbar)
     }
 
     override fun onStart() {

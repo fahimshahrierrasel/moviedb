@@ -46,6 +46,14 @@ class PersonDetailsFragment : Fragment(), PersonDetailsContract.View {
         }
     }
 
+    override fun showProgressView() {
+        rootActivity.progressView.show()
+    }
+
+    override fun hideProgressView() {
+        rootActivity.progressView.hide()
+    }
+
     override fun findPersonId() {
         val personId = arguments?.getInt(PERSON_ID)
         personDetailsPresenter.getPersonDetails(personId!!)
