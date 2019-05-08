@@ -1,5 +1,8 @@
 # MovieDB
 
+[Download APK](https://github.com/fahimshahrierrasel/moviedb/releases/download/v1.0/MovieDB_debug.apk)
+
+
 #### Dependencies
 * Logger
 * RXJava2, RXAndroid and RXKotlin
