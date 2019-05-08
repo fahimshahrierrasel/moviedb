@@ -1,6 +1,7 @@
 package com.fahimshahrierrasel.moviedb.ui
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
@@ -8,7 +9,6 @@ import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.Genre
 import com.fahimshahrierrasel.moviedb.helper.*
-import com.fahimshahrierrasel.moviedb.ui.about.AboutContract
 import com.fahimshahrierrasel.moviedb.ui.about.AboutFragment
 import com.fahimshahrierrasel.moviedb.ui.about.AboutPresenter
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverFragment
@@ -25,13 +25,14 @@ import com.fahimshahrierrasel.moviedb.ui.person.PersonFragment
 import com.fahimshahrierrasel.moviedb.ui.person.PersonPresenter
 import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsPresenter
+import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
+import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var myDrawer: Drawer
     val progressView by lazy { MovieDBProgressDialog(this) }
 
@@ -41,6 +42,20 @@ class MainActivity : AppCompatActivity() {
 
         Logger.addLogAdapter(AndroidLogAdapter())
 
+        // Initializing splash fragment
+        val splashFragment = SplashFragment.newInstance(Bundle())
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_fragment_placeholder, splashFragment)
+        }.commit()
+        SplashPresenter(splashFragment)
+
+        Handler().postDelayed({
+            openMovieList()
+            setDrawer()
+        }, 3000)
+    }
+
+    private fun setDrawer() {
         myDrawer = drawer {
             primaryItem("Genres") {
                 icon = R.drawable.ic_library_books_black_24dp
@@ -100,13 +115,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        openMovieList()
     }
 
 
     private fun openMovieList(keyword: String = "popular") {
-
         val bundle = Bundle()
         bundle.putString(MOVIE_KEYWORD, keyword)
 
