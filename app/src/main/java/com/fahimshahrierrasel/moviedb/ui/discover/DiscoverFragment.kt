@@ -5,24 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
-import com.fahimshahrierrasel.moviedb.data.model.Genre
-import com.fahimshahrierrasel.moviedb.helper.SpacingItemDecoration
-import com.fahimshahrierrasel.moviedb.helper.Tools
+import com.fahimshahrierrasel.moviedb.data.model.MovieResult
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
-import com.fahimshahrierrasel.moviedb.ui.adapters.GenreAdapter
+import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_discover.*
-import kotlinx.android.synthetic.main.fragment_genres.*
-import kotlinx.android.synthetic.main.fragment_genres.toolbar
 
 class DiscoverFragment : Fragment(), DiscoverContract.View {
-    private lateinit var genrePresenter: DiscoverContract.Presenter
-    private lateinit var genreAdapter: GenreAdapter
-    private val genres = ArrayList<Genre>()
+    private lateinit var discoverPresenter: DiscoverContract.Presenter
+    private lateinit var movieAdapter: MovieAdapter
+    private val movies = ArrayList<MovieResult>()
     private lateinit var rootActivity: MainActivity
     private var isAdvanceSearchShown = false
 
@@ -80,31 +78,51 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
         val yearAdapter = ArrayAdapter<String>(rootActivity, android.R.layout.simple_spinner_dropdown_item, years)
         spinner_year.adapter = yearAdapter
 
+        btn_search.setOnClickListener {
+            val query = et_movie_name.text.toString()
+            discoverPresenter.searchMovies(query)
+        }
 
-//        rv_genres.layoutManager = GridLayoutManager(rootActivity, 2)
-//        rv_genres.addItemDecoration(
-//            SpacingItemDecoration(
-//                2,
-//                Tools.dpToPx(rootActivity, 2),
-//                true
-//            )
-//        )
-//        rv_genres.setHasFixedSize(true)
-//        rv_genres.isNestedScrollingEnabled = false
-//        genreAdapter = GenreAdapter(genres)
-//        rv_genres.adapter = genreAdapter
-//        genreAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
-//            rootActivity.openGenreMovies(genres[position])
-//        }
+        btn_advance_search.setOnClickListener {
+            val voteGte = rs_rating.getThumb(0).value
+            val voteLte = rs_rating.getThumb(1).value
+            val runtimeGte = rs_duration.getThumb(0).value
+            val runtimeLte = rs_duration.getThumb(1).value
+            val year = spinner_year.selectedItem.toString()
+
+            discoverPresenter.discoverMovies(year.toInt(), voteGte, voteLte, runtimeGte, runtimeLte)
+        }
+
+        rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        movieAdapter = MovieAdapter(movies)
+        rv_movies.adapter = movieAdapter
+        movieAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
+            rootActivity.openMovieDetails(movies[position].id)
+        }
+    }
+
+    override fun showInputWarning(message: String) {
+        Toast.makeText(rootActivity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun appendDiscoveredMovies(movieResults: List<MovieResult>) {
+        movies.addAll(movieResults)
+        movieAdapter.notifyDataSetChanged()
+    }
+
+    override fun addDiscoveredMovies(movieResults: List<MovieResult>) {
+        movies.clear();
+        movies.addAll(movieResults)
+        movieAdapter.notifyDataSetChanged()
     }
 
 
     override fun onStart() {
         super.onStart()
-        genrePresenter.start()
+        discoverPresenter.start()
     }
 
     override fun setPresenter(presenter: DiscoverContract.Presenter) {
-        genrePresenter = presenter
+        discoverPresenter = presenter
     }
 }

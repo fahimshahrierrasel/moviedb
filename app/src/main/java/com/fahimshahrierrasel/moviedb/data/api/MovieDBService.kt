@@ -40,4 +40,23 @@ interface MovieDBService {
         @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
     ): Single<MovieList>
+
+    @GET("discover/movie")
+    fun requestForDiscoveredMovies(
+        @Query("api_key") apiKey: String,
+        @Query("primary_release_year") releaseYear: Int,
+        @Query("vote_average.gte") voteAverageGte: Int,
+        @Query("vote_average.lte") voteAverageLte: Int,
+        @Query("with_runtime.gte") runtimeGte: Int,
+        @Query("with_runtime.lte") runtimeLte: Int,
+        @Query("sort_by") sortBy: String = "popularity.desc",
+        @Query("page") page: Int = 1
+    ): Single<MovieList>
+
+    @GET("search/movie")
+    fun requestForSearchMovies(
+        @Query("api_key") apiKey: String,
+        @Query("query") query: String,
+        @Query("page") page: Int = 1
+    ): Single<MovieList>
 }
