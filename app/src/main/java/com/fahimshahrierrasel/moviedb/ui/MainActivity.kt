@@ -2,8 +2,6 @@ package com.fahimshahrierrasel.moviedb.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import co.zsmb.materialdrawerkt.builders.DrawerBuilderKt
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
@@ -23,6 +21,8 @@ import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListPresenter
+import com.fahimshahrierrasel.moviedb.ui.person.PersonFragment
+import com.fahimshahrierrasel.moviedb.ui.person.PersonPresenter
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             primaryItem("Person") {
                 icon = R.drawable.ic_person_black_24dp
                 onClick { _ ->
-
+                    openPersonFragment()
                     false
                 }
             }
@@ -123,6 +123,16 @@ class MainActivity : AppCompatActivity() {
 
         GenrePresenter(genreFragment)
     }
+
+    private fun openPersonFragment() {
+        val personFragment = PersonFragment.newInstance(Bundle())
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_fragment_placeholder, personFragment)
+        }.commit()
+
+        PersonPresenter(personFragment)
+    }
+
 
     private fun openDiscoverFragment() {
         val discoverFragment = DiscoverFragment.newInstance(Bundle())

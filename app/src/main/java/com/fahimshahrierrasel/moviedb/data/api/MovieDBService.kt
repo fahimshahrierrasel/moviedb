@@ -1,9 +1,6 @@
 package com.fahimshahrierrasel.moviedb.data.api
 
-import com.fahimshahrierrasel.moviedb.data.model.Credit
-import com.fahimshahrierrasel.moviedb.data.model.Movie
-import com.fahimshahrierrasel.moviedb.data.model.MovieGenre
-import com.fahimshahrierrasel.moviedb.data.model.MovieList
+import com.fahimshahrierrasel.moviedb.data.model.*
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -59,4 +56,19 @@ interface MovieDBService {
         @Query("query") query: String,
         @Query("page") page: Int = 1
     ): Single<MovieList>
+
+
+    @GET("person/popular")
+    fun requestForPopularPersons(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int = 1
+    ): Single<PersonResponse>
+
+    @GET("person/{person_id}")
+    fun requestForPersonDetails(
+        @Path("person_id") personId: Int,
+        @Query("api_key") apiKey: String
+    ): Single<Movie>
+
+
 }
