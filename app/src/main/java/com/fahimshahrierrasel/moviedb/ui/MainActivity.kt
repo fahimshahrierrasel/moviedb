@@ -7,10 +7,7 @@ import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.Genre
-import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
-import com.fahimshahrierrasel.moviedb.helper.GENRE_NAME
-import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
-import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
+import com.fahimshahrierrasel.moviedb.helper.*
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverFragment
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverPresenter
 import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
@@ -23,6 +20,8 @@ import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListPresenter
 import com.fahimshahrierrasel.moviedb.ui.person.PersonFragment
 import com.fahimshahrierrasel.moviedb.ui.person.PersonPresenter
+import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsFragment
+import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsPresenter
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -98,8 +97,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        openMovieList()
-        openDiscoverFragment()
+        openMovieList()
     }
 
 
@@ -164,5 +162,16 @@ class MainActivity : AppCompatActivity() {
             addToBackStack(null)
         }.commit()
         MovieGenrePresenter(movieGenreFragment)
+    }
+
+    fun openPersonDetails(personId: Int) {
+        val bundle = Bundle()
+        bundle.putInt(PERSON_ID, personId)
+        val personDetailsFragment = PersonDetailsFragment.newInstance(bundle)
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_fragment_placeholder, personDetailsFragment)
+            addToBackStack(null)
+        }.commit()
+        PersonDetailsPresenter(personDetailsFragment)
     }
 }

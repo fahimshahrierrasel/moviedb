@@ -1,8 +1,9 @@
-package com.fahimshahrierrasel.moviedb.ui.movie_details
+package com.fahimshahrierrasel.moviedb.ui.person_details
 
 import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
 import com.fahimshahrierrasel.moviedb.data.model.CreditResponse
-import com.fahimshahrierrasel.moviedb.data.model.Movie
+import com.fahimshahrierrasel.moviedb.data.model.Person
+import com.fahimshahrierrasel.moviedb.data.model.PersonCreditResponse
 import com.fahimshahrierrasel.moviedb.helper.apiKey
 import com.orhanobut.logger.Logger
 import io.reactivex.SingleObserver
@@ -11,23 +12,24 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class MovieDetailsPresenter(private val movieDetailView: MovieDetailsContract.View) : MovieDetailsContract.Presenter {
+class PersonDetailsPresenter(private val personDetailsView: PersonDetailsContract.View) :
+    PersonDetailsContract.Presenter {
 
     init {
-        movieDetailView.setPresenter(this)
+        personDetailsView.setPresenter(this)
     }
 
     private val compositeDisposable = CompositeDisposable()
 
-    override fun getMovieDetails(movieId: Int) {
-
-        ApiUtils.movieDBService.requestForMovie(movieId, apiKey)
+    override fun getPersonDetails(personId: Int) {
+        ApiUtils.movieDBService.requestForPersonDetails(personId, apiKey)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<Movie> {
-                override fun onSuccess(t: Movie) {
-                    movieDetailView.populateMovieDetails(t)
-                    getMovieCredits(movieId)
+            .subscribe(object : SingleObserver<Person> {
+                override fun onSuccess(t: Person) {
+                    personDetailsView.populatePersonDetails(t)
+                    Logger.d(t.id)
+                    getKnownMovies(t.id)
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -41,13 +43,13 @@ class MovieDetailsPresenter(private val movieDetailView: MovieDetailsContract.Vi
             })
     }
 
-    override fun getMovieCredits(movieId: Int) {
-        ApiUtils.movieDBService.requestForGetCredits(movieId, apiKey)
+    override fun getKnownMovies(personId: Int) {
+        ApiUtils.movieDBService.requestForPersonMovies(personId, apiKey)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<CreditResponse> {
-                override fun onSuccess(t: CreditResponse) {
-                    movieDetailView.populateCredits(t)
+            .subscribe(object : SingleObserver<PersonCreditResponse> {
+                override fun onSuccess(t: PersonCreditResponse) {
+                    personDetailsView.populateMovieCredits(t)
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -62,7 +64,7 @@ class MovieDetailsPresenter(private val movieDetailView: MovieDetailsContract.Vi
     }
 
     override fun start() {
-        movieDetailView.findMovieId()
+        personDetailsView.findPersonId()
     }
 
 }

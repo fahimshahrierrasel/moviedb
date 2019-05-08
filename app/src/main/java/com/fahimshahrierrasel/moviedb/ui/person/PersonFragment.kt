@@ -51,7 +51,7 @@ class PersonFragment : Fragment(), PersonContract.View {
         personAdapter = PersonAdapter(personResults)
         rv_genres.adapter = personAdapter
         personAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
-            //            rootActivity.openGenreMovies(personResults[position])
+            rootActivity.openPersonDetails(personResults[position].id)
         }
     }
 

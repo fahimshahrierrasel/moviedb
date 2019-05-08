@@ -29,7 +29,7 @@ interface MovieDBService {
     fun requestForGetCredits(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
-    ): Single<Credit>
+    ): Single<CreditResponse>
 
     @GET("genre/{genre_id}/movies")
     fun requestForGenreMovies(
@@ -68,7 +68,13 @@ interface MovieDBService {
     fun requestForPersonDetails(
         @Path("person_id") personId: Int,
         @Query("api_key") apiKey: String
-    ): Single<Movie>
+    ): Single<Person>
+
+    @GET("person/{person_id}/movie_credits")
+    fun requestForPersonMovies(
+        @Path("person_id") personId: Int,
+        @Query("api_key") apiKey: String
+    ): Single<PersonCreditResponse>
 
 
 }

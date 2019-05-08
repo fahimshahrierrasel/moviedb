@@ -10,14 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fahimshahrierrasel.moviedb.R
-import com.fahimshahrierrasel.moviedb.data.model.Cast
-import com.fahimshahrierrasel.moviedb.data.model.Credit
+import com.fahimshahrierrasel.moviedb.data.model.CreditCast
+import com.fahimshahrierrasel.moviedb.data.model.CreditResponse
 import com.fahimshahrierrasel.moviedb.data.model.Movie
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_ID
 import com.fahimshahrierrasel.moviedb.helper.backdropPrefix
 import com.fahimshahrierrasel.moviedb.helper.posterPrefix
 import com.fahimshahrierrasel.moviedb.ui.adapters.CastAdapter
-import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.content_movie.*
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 
@@ -25,7 +24,7 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
 
     private lateinit var movieDetailsPresenter: MovieDetailsContract.Presenter
     private lateinit var castAdapter: CastAdapter
-    private val casts = ArrayList<Cast>()
+    private val casts = ArrayList<CreditCast>()
 
     companion object {
         fun newInstance(bundle: Bundle) = MovieDetailsFragment().apply {
@@ -70,11 +69,11 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
         tv_movie_revenue.text = "${movie.revenue / 1000000} million"
     }
 
-    override fun populateCredits(credit: Credit) {
-        if (credit.cast.size > 10)
-            casts.addAll(credit.cast.subList(0, 10))
+    override fun populateCredits(creditResponse: CreditResponse) {
+        if (creditResponse.cast.size > 10)
+            casts.addAll(creditResponse.cast.subList(0, 10))
         else
-            casts.addAll(credit.cast)
+            casts.addAll(creditResponse.cast)
         castAdapter.notifyDataSetChanged()
     }
 

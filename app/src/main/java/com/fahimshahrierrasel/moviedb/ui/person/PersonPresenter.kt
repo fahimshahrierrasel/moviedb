@@ -23,7 +23,6 @@ class PersonPresenter(private val personView: PersonContract.View) : PersonContr
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<PersonResponse> {
                 override fun onSuccess(t: PersonResponse) {
-                    Logger.d(t)
                     personView.populatePersonRecyclerView(t.results)
                 }
 
