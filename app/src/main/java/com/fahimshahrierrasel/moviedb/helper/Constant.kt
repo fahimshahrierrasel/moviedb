@@ -8,7 +8,7 @@ const val backdropPrefix = "https://image.tmdb.org/t/p/w780"
 const val castProfilePrefix = "https://image.tmdb.org/t/p/w276_and_h350_face"
 
 
-
+const val GITHUB_URL = "https://github.com/fahimshahrierrasel/moviedb"
 
 
 // Key Constant

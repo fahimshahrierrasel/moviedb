@@ -8,6 +8,9 @@ import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.Genre
 import com.fahimshahrierrasel.moviedb.helper.*
+import com.fahimshahrierrasel.moviedb.ui.about.AboutContract
+import com.fahimshahrierrasel.moviedb.ui.about.AboutFragment
+import com.fahimshahrierrasel.moviedb.ui.about.AboutPresenter
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverFragment
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverPresenter
 import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
@@ -91,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             primaryItem("About") {
                 icon = R.drawable.ic_info_black_24dp
                 onClick { _ ->
-
+                    openAboutFragment()
                     false
                 }
             }
@@ -131,6 +134,14 @@ class MainActivity : AppCompatActivity() {
         PersonPresenter(personFragment)
     }
 
+    private fun openAboutFragment() {
+        val aboutFragment = AboutFragment.newInstance(Bundle())
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_fragment_placeholder, aboutFragment)
+        }.commit()
+
+        AboutPresenter(aboutFragment)
+    }
 
     private fun openDiscoverFragment() {
         val discoverFragment = DiscoverFragment.newInstance(Bundle())
