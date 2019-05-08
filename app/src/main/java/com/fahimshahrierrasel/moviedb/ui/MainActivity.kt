@@ -7,7 +7,9 @@ import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
+import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
 import com.fahimshahrierrasel.moviedb.data.model.Genre
+import com.fahimshahrierrasel.moviedb.data.model.MovieGenre
 import com.fahimshahrierrasel.moviedb.helper.*
 import com.fahimshahrierrasel.moviedb.ui.about.AboutFragment
 import com.fahimshahrierrasel.moviedb.ui.about.AboutPresenter
@@ -30,17 +32,42 @@ import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import io.reactivex.SingleObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var myDrawer: Drawer
     val progressView by lazy { MovieDBProgressDialog(this) }
+    private val genres by lazy { ArrayList<Genre>() }
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         Logger.addLogAdapter(AndroidLogAdapter())
+
+        ApiUtils.movieDBService.requestForMovieGenre(apiKey)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : SingleObserver<MovieGenre> {
+                override fun onSuccess(t: MovieGenre) {
+                    genres.addAll(t.genres)
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                    compositeDisposable.add(d)
+                }
+
+                override fun onError(e: Throwable) {
+                    Logger.e(e.localizedMessage)
+                }
+            })
+
 
         // Initializing splash fragment
         val splashFragment = SplashFragment.newInstance(Bundle())
@@ -117,6 +144,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getGenreFromId(ids: List<Int>): String {
+
+        val filteredGenre = ArrayList<Genre>()
+        for (id in ids) {
+            val genre = genres.find { it.id == id }
+            if (genre != null)
+                filteredGenre.add(genre)
+        }
+
+        return filteredGenre.joinToString { it.name }
+    }
 
     private fun openMovieList(keyword: String = "popular") {
         val bundle = Bundle()
@@ -198,5 +236,10 @@ class MainActivity : AppCompatActivity() {
             addToBackStack(null)
         }.commit()
         PersonDetailsPresenter(personDetailsFragment)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 }

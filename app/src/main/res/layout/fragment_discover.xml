@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="Search Here"
+                    android:hint="@string/search_here"
                     android:inputType="textCapWords"
                     android:padding="15dp"
                     android:singleLine="true" />
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Search" />
+                    android:text="@string/search" />
             </LinearLayout>
 
             <LinearLayout
@@ -75,7 +75,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Year" />
+                        android:text="@string/year" />
 
                     <Spinner
                         android:id="@+id/spinner_year"
@@ -88,7 +88,7 @@
                         android:id="@+id/tv_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rating" />
+                        android:text="@string/rating" />
 
                     <io.apptik.widget.MultiSlider
                         android:id="@+id/rs_rating"
@@ -103,7 +103,7 @@
                         android:id="@+id/tv_duration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Duration" />
+                        android:text="@string/duration" />
 
                     <io.apptik.widget.MultiSlider
                         android:id="@+id/rs_duration"
@@ -119,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Advance Search" />
+                        android:text="@string/advance_search" />
 
                 </LinearLayout>
             </LinearLayout>

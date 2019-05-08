@@ -63,7 +63,7 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
         tv_duration.text = "Duration: 70 - 200"
 
         // rating slider change listener
-        rs_rating.setOnThumbValueChangeListener { multiSlider, thumb, thumbIndex, value ->
+        rs_rating.setOnThumbValueChangeListener { multiSlider, _, _, _ ->
             val min = multiSlider.getThumb(0).value
             val max = multiSlider.getThumb(1).value
 
@@ -71,7 +71,7 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
         }
 
         // duration slider change listener
-        rs_duration.setOnThumbValueChangeListener { multiSlider, thumb, thumbIndex, value ->
+        rs_duration.setOnThumbValueChangeListener { multiSlider, _, _, _ ->
             val min = multiSlider.getThumb(0).value
             val max = multiSlider.getThumb(1).value
 

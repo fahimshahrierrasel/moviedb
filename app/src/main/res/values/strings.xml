@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Movie DB</string>
+    <string name="release_on">Release On</string>
+    <string name="year">Year</string>
+    <string name="rating">Rating</string>
+    <string name="duration">Duration</string>
+    <string name="advance_search">Advance Search</string>
+    <string name="search">Search</string>
+    <string name="search_here">Search Here</string>
+    <string name="biography">Biography</string>
+    <string name="info">Info</string>
+    <string name="known_for">Known for</string>
+    <string name="overview">Overview</string>
+    <string name="top_billed_cast">Top Billed Cast</string>
 </resources>

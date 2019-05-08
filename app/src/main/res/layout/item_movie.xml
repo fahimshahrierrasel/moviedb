@@ -30,7 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="How to Train Your Dragon: The Hidden World"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -39,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Action, Adventure, Animation"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -58,12 +56,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Release On" />
+                        android:text="@string/release_on" />
 
                     <TextView
                         android:id="@+id/tv_release_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
                         tools:text="@tools:sample/date/ddmmyy" />
                 </LinearLayout>
 
@@ -76,15 +75,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rating" />
+                        android:text="@string/rating" />
 
                     <TextView
                         android:id="@+id/tv_rating"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="8.6" />
+                        android:textStyle="bold" />
                 </LinearLayout>
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
