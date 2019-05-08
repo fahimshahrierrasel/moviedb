@@ -11,11 +11,14 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class PersonPresenter(private val personView: PersonContract.View) : PersonContract.Presenter {
+
+
     init {
         personView.setPresenter(this)
     }
 
     private val compositeDisposable = CompositeDisposable()
+    private var currentPage = 1
 
     override fun getAllPerson(page: Int) {
         ApiUtils.movieDBService.requestForPopularPersons(apiKey, page)
@@ -25,6 +28,7 @@ class PersonPresenter(private val personView: PersonContract.View) : PersonContr
                 override fun onSuccess(t: PersonResponse) {
                     personView.populatePersonRecyclerView(t.results)
                     personView.hideProgressView()
+                    personView.stopLoadMore()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -40,9 +44,12 @@ class PersonPresenter(private val personView: PersonContract.View) : PersonContr
 
     }
 
+    override fun loadNextPage() {
+        getAllPerson(currentPage++)
+    }
 
     override fun start() {
-        getAllPerson()
         personView.showProgressView()
+        loadNextPage()
     }
 }

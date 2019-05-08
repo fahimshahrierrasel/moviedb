@@ -41,12 +41,25 @@ class MovieGenreFragment : Fragment(), MovieGenreContract.View {
             toolbar.title = this?.capitalize()
         }
 
+        // Setting movie recycler view
         rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         movieAdapter = MovieAdapter(movieResults)
         rv_movies.adapter = movieAdapter
+
+        // Movie item click will open movie details
         movieAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
             rootActivity.openMovieDetails(movieResults[position].id)
         }
+
+        // getting genre id from bundle and load more data event
+        val genreId = arguments?.getInt(GENRE_ID)
+        movieAdapter.setOnLoadMoreListener({
+            movieGenrePresenter.loadNextPage(genreId!!)
+        }, rv_movies)
+    }
+
+    override fun stopLoadMore() {
+        movieAdapter.loadMoreComplete()
     }
 
     override fun showProgressView() {
@@ -63,8 +76,8 @@ class MovieGenreFragment : Fragment(), MovieGenreContract.View {
     }
 
     override fun findGenreId() {
-        val movieId = arguments?.getInt(GENRE_ID)
-        movieGenrePresenter.getSameGenreMovies(movieId!!)
+        val genreId = arguments?.getInt(GENRE_ID)
+        movieGenrePresenter.loadNextPage(genreId!!)
     }
 
     override fun onStart() {

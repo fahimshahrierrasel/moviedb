@@ -13,10 +13,10 @@ import com.fahimshahrierrasel.moviedb.data.model.MovieResult
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 
 class MovieListFragment : Fragment(), MovieListContract.View {
-
     private lateinit var movieListPresenter: MovieListContract.Presenter
     private lateinit var movieAdapter: MovieAdapter
     private val movieResults = ArrayList<MovieResult>()
@@ -37,12 +37,18 @@ class MovieListFragment : Fragment(), MovieListContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val movieKeyword = arguments?.getString(MOVIE_KEYWORD, "popular")
+
         rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         movieAdapter = MovieAdapter(movieResults)
         rv_movies.adapter = movieAdapter
         movieAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
             rootActivity.openMovieDetails(movieResults[position].id)
         }
+
+        movieAdapter.setOnLoadMoreListener({
+            movieListPresenter.loadNextPage(movieKeyword!!)
+        }, rv_movies)
     }
 
     override fun showProgressView() {
@@ -53,6 +59,10 @@ class MovieListFragment : Fragment(), MovieListContract.View {
         rootActivity.progressView.hide()
     }
 
+    override fun stopLoadMore() {
+        movieAdapter.loadMoreComplete()
+    }
+
     override fun populateMovieRecyclerView(movieResults: List<MovieResult>) {
         this.movieResults.addAll(movieResults)
         movieAdapter.notifyDataSetChanged()
@@ -61,7 +71,7 @@ class MovieListFragment : Fragment(), MovieListContract.View {
     override fun findMovieKeyword() {
         val movieKeyword = arguments?.getString(MOVIE_KEYWORD, "popular")
         movieKeyword?.apply {
-            movieListPresenter.getMovieList(this)
+            movieListPresenter.loadNextPage(this)
         }.also {
             it!!.replace("_", " ").toUpperCase().apply {
                 toolbar.title = "$this MOVIES"

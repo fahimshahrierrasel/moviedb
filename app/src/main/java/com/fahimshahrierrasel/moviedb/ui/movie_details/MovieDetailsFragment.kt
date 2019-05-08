@@ -41,6 +41,8 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // setting cast list
         rv_casts.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         castAdapter = CastAdapter(casts)
         rv_casts.adapter = castAdapter
@@ -81,6 +83,7 @@ class MovieDetailsFragment : Fragment(), MovieDetailsContract.View {
     }
 
     override fun populateCredits(creditResponse: CreditResponse) {
+        // Only load 10 cast(loading all cast is not efficient too much memory)
         if (creditResponse.cast.size > 10)
             casts.addAll(creditResponse.cast.subList(0, 10))
         else

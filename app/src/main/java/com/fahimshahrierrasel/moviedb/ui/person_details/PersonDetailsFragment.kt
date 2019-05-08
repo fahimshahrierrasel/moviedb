@@ -37,10 +37,13 @@ class PersonDetailsFragment : Fragment(), PersonDetailsContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Preparing movie recycler view
         rv_person_movies.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         movieAdapter = PersonMovieAdapter(casts)
         rv_person_movies.adapter = movieAdapter
 
+        // Movie item click listener
         movieAdapter.setOnItemClickListener { _, _, position ->
             rootActivity.openMovieDetails(casts[position].id)
         }
@@ -65,6 +68,7 @@ class PersonDetailsFragment : Fragment(), PersonDetailsContract.View {
             .into(iv_person_image)
 
 
+        // setting actor name as toolbar title
         toolbar.title = person.name
         toolbar.setTitleTextColor(Color.WHITE)
 

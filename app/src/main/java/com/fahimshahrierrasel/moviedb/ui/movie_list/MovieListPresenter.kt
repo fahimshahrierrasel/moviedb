@@ -16,15 +16,17 @@ class MovieListPresenter(private val movieListView: MovieListContract.View) : Mo
     }
 
     private val compositeDisposable = CompositeDisposable()
+    private var currentPage = 1
 
-    override fun getMovieList(keyword: String) {
-        ApiUtils.movieDBService.requestForMovieList(keyword, apiKey)
+    override fun getMovieList(keyword: String, page: Int) {
+        ApiUtils.movieDBService.requestForMovieList(keyword, apiKey, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<MovieList> {
                 override fun onSuccess(t: MovieList) {
                     movieListView.populateMovieRecyclerView(t.movieResults)
                     movieListView.hideProgressView()
+                    movieListView.stopLoadMore()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -34,10 +36,13 @@ class MovieListPresenter(private val movieListView: MovieListContract.View) : Mo
                 override fun onError(e: Throwable) {
                     Logger.e(e.localizedMessage)
                     movieListView.hideProgressView()
+                    movieListView.stopLoadMore()
                 }
-
             })
+    }
 
+    override fun loadNextPage(keyword: String) {
+        getMovieList(keyword, currentPage++)
     }
 
 

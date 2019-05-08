@@ -12,7 +12,6 @@ import com.fahimshahrierrasel.moviedb.data.model.PersonResult
 import com.fahimshahrierrasel.moviedb.helper.SpacingItemDecoration
 import com.fahimshahrierrasel.moviedb.helper.Tools
 import com.fahimshahrierrasel.moviedb.ui.MainActivity
-import com.fahimshahrierrasel.moviedb.ui.adapters.GenreAdapter
 import com.fahimshahrierrasel.moviedb.ui.adapters.PersonAdapter
 import kotlinx.android.synthetic.main.fragment_genres.*
 
@@ -38,6 +37,8 @@ class PersonFragment : Fragment(), PersonContract.View {
 
         toolbar.title = "Popular Persons"
 
+        // Setting actor recycler view.
+        // This fragment is reused from genre so rv_genres is acting as actor recycler view
         rv_genres.layoutManager = GridLayoutManager(rootActivity, 2)
         rv_genres.addItemDecoration(
             SpacingItemDecoration(
@@ -50,9 +51,20 @@ class PersonFragment : Fragment(), PersonContract.View {
         rv_genres.isNestedScrollingEnabled = false
         personAdapter = PersonAdapter(personResults)
         rv_genres.adapter = personAdapter
+
+        // Actor item click listener. Open actor details fragment
         personAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
             rootActivity.openPersonDetails(personResults[position].id)
         }
+
+        // Load more actor event. Triggered when scrolling to the last item
+        personAdapter.setOnLoadMoreListener({
+            personPresenter.loadNextPage()
+        }, rv_genres)
+    }
+
+    override fun stopLoadMore() {
+        personAdapter.loadMoreComplete()
     }
 
     override fun showProgressView() {

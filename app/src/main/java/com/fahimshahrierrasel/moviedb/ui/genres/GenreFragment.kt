@@ -37,6 +37,7 @@ class GenreFragment : Fragment(), GenreContract.View {
 
         toolbar.title = "Movie Genres"
 
+        // Setting genre recycler view
         rv_genres.layoutManager = GridLayoutManager(rootActivity, 2)
         rv_genres.addItemDecoration(
             SpacingItemDecoration(
@@ -49,6 +50,8 @@ class GenreFragment : Fragment(), GenreContract.View {
         rv_genres.isNestedScrollingEnabled = false
         genreAdapter = GenreAdapter(genres)
         rv_genres.adapter = genreAdapter
+
+        // Genre click event open movie list with same genre
         genreAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
             rootActivity.openGenreMovies(genres[position])
         }

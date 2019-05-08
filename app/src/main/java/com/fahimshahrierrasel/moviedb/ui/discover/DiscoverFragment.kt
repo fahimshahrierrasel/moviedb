@@ -16,6 +16,9 @@ import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_discover.*
+import kotlinx.android.synthetic.main.fragment_discover.rv_movies
+import kotlinx.android.synthetic.main.fragment_discover.toolbar
+import kotlinx.android.synthetic.main.fragment_movie_list.*
 
 class DiscoverFragment : Fragment(), DiscoverContract.View {
     private lateinit var discoverPresenter: DiscoverContract.Presenter
@@ -40,6 +43,7 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
 
         toolbar.title = "Discover Movies"
 
+        // Advance search show and hide event
         iv_show_hide.setOnClickListener {
             isAdvanceSearchShown = !isAdvanceSearchShown
             if (isAdvanceSearchShown)
@@ -48,15 +52,17 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
                 ll_advance_search.visibility = View.GONE
         }
 
+        // setting default movie rating
         rs_rating.getThumb(0).value = 5
         rs_rating.getThumb(1).value = 10
+        tv_rating.text = "Rating: 5 - 10"
 
+        // setting defult movie duration
         rs_duration.getThumb(0).value = 70
         rs_duration.getThumb(1).value = 200
-
-        tv_rating.text = "Rating: 5 - 10"
         tv_duration.text = "Duration: 70 - 200"
 
+        // rating slider change listener
         rs_rating.setOnThumbValueChangeListener { multiSlider, thumb, thumbIndex, value ->
             val min = multiSlider.getThumb(0).value
             val max = multiSlider.getThumb(1).value
@@ -64,6 +70,7 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
             tv_rating.text = "Rating: $min - $max"
         }
 
+        // duration slider change listener
         rs_duration.setOnThumbValueChangeListener { multiSlider, thumb, thumbIndex, value ->
             val min = multiSlider.getThumb(0).value
             val max = multiSlider.getThumb(1).value
@@ -71,6 +78,7 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
             tv_duration.text = "Duration: $min - $max"
         }
 
+        // populating year spinner
         val years = ArrayList<String>()
         for (year in 2019 downTo 1901 step 1)
             years.add(year.toString())
@@ -78,11 +86,13 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
         val yearAdapter = ArrayAdapter<String>(rootActivity, android.R.layout.simple_spinner_dropdown_item, years)
         spinner_year.adapter = yearAdapter
 
+        // Search button click listener
         btn_search.setOnClickListener {
             val query = et_movie_name.text.toString()
             discoverPresenter.searchMovies(query)
         }
 
+        // advance search button click listener
         btn_advance_search.setOnClickListener {
             val voteGte = rs_rating.getThumb(0).value
             val voteLte = rs_rating.getThumb(1).value
@@ -93,13 +103,28 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
             discoverPresenter.discoverMovies(year.toInt(), voteGte, voteLte, runtimeGte, runtimeLte)
         }
 
+        // setting movie recycler view
         rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         movieAdapter = MovieAdapter(movies)
         rv_movies.adapter = movieAdapter
         movieAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
             rootActivity.openMovieDetails(movies[position].id)
         }
+
+        // load more movie event
+        movieAdapter.setOnLoadMoreListener({
+            discoverPresenter.loadNextPage()
+        }, rv_movies)
     }
+
+    override fun stopLoadMore() {
+        movieAdapter.loadMoreComplete()
+    }
+
+    override fun noLoadMore() {
+        movieAdapter.loadMoreEnd()
+    }
+
 
     override fun showProgressView() {
         rootActivity.progressView.show()
@@ -119,7 +144,7 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
     }
 
     override fun addDiscoveredMovies(movieResults: List<MovieResult>) {
-        movies.clear();
+        movies.clear()
         movies.addAll(movieResults)
         movieAdapter.notifyDataSetChanged()
     }
