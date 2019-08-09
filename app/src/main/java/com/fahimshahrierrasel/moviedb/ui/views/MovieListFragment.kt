@@ -1,26 +1,30 @@
-package com.fahimshahrierrasel.moviedb.ui.movie_list
+package com.fahimshahrierrasel.moviedb.ui.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
-import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
+import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 
-class MovieListFragment : Fragment(), MovieListContract.View {
-    private lateinit var movieListPresenter: MovieListContract.Presenter
+class MovieListFragment : BaseFragment() {
     private lateinit var movieAdapter: MovieAdapter
     private val movieResults = ArrayList<MovieResult>()
-    private lateinit var rootActivity: MainActivity
+    private var currentPage = 1
+
+    private val movieViewModel by lazy {
+        ViewModelProvider(rootActivity, ViewModelProvider.NewInstanceFactory()).get(MovieViewModel::class.java)
+    }
 
     companion object {
         fun newInstance(bundle: Bundle) = MovieListFragment().apply {
@@ -29,8 +33,6 @@ class MovieListFragment : Fragment(), MovieListContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootActivity = activity as MainActivity
-
         return inflater.inflate(R.layout.fragment_movie_list, container, false)
     }
 
@@ -46,45 +48,20 @@ class MovieListFragment : Fragment(), MovieListContract.View {
             rootActivity.openMovieDetails(movieResults[position].id)
         }
 
+        movieViewModel.getMovieListWith(movieKeyword!!, currentPage)
+
+        movieViewModel.movieList.observe(viewLifecycleOwner, Observer { movieList ->
+            if(currentPage == 1)
+                movieResults.clear()
+            movieResults.addAll(movieList.movieResults)
+            movieAdapter.notifyDataSetChanged()
+            movieAdapter.loadMoreComplete()
+            this.currentPage = movieList.page
+        })
+
         movieAdapter.setOnLoadMoreListener({
-            movieListPresenter.loadNextPage(movieKeyword!!)
+            Logger.d("Change Current Page From $currentPage to ${currentPage + 1}")
+            movieViewModel.getMovieListWith(movieKeyword, currentPage + 1)
         }, rv_movies)
-    }
-
-    override fun showProgressView() {
-        rootActivity.progressView.show()
-    }
-
-    override fun hideProgressView() {
-        rootActivity.progressView.hide()
-    }
-
-    override fun stopLoadMore() {
-        movieAdapter.loadMoreComplete()
-    }
-
-    override fun populateMovieRecyclerView(movieResults: List<MovieResult>) {
-        this.movieResults.addAll(movieResults)
-        movieAdapter.notifyDataSetChanged()
-    }
-
-    override fun findMovieKeyword() {
-        val movieKeyword = arguments?.getString(MOVIE_KEYWORD, "popular")
-        movieKeyword?.apply {
-            movieListPresenter.loadNextPage(this)
-        }.also {
-            it!!.replace("_", " ").toUpperCase().apply {
-                toolbar.title = "$this MOVIES"
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        movieListPresenter.start()
-    }
-
-    override fun setPresenter(presenter: MovieListContract.Presenter) {
-        movieListPresenter = presenter
     }
 }

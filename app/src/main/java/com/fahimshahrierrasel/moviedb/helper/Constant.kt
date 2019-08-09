@@ -1,7 +1,7 @@
 package com.fahimshahrierrasel.moviedb.helper
 
 const val API_BASE_URL = "https://api.themoviedb.org/3/"
-const val apiKey = "Your API Key"
+const val apiKey = "c2881bfd23e0da43006d5456bb4583b6"
 
 const val posterPrefix = "https://image.tmdb.org/t/p/w154"
 const val backdropPrefix = "https://image.tmdb.org/t/p/w780"

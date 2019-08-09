@@ -13,11 +13,11 @@ interface MovieDBService {
     ): Single<MovieGenre>
 
     @GET("movie/{keyword}")
-    fun requestForMovieList(
+    suspend fun requestForMovieList(
         @Path("keyword") keyword: String,
         @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
-    ): Single<MovieList>
+    ): MovieList
 
     @GET("movie/{movie_id}")
     fun requestForMovie(

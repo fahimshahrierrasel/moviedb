@@ -21,14 +21,13 @@ import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsPresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
-import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListFragment
-import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListPresenter
 import com.fahimshahrierrasel.moviedb.ui.person.PersonFragment
 import com.fahimshahrierrasel.moviedb.ui.person.PersonPresenter
 import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsPresenter
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
+import com.fahimshahrierrasel.moviedb.ui.views.MovieListFragment
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -79,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             openMovieList()
             setDrawer()
-        }, 3000)
+        }, 1000)
     }
 
     private fun setDrawer() {
@@ -164,8 +163,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, popularFragment)
         }.commit()
-
-        MovieListPresenter(popularFragment)
     }
 
     private fun openGenreFragment() {
