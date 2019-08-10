@@ -20,16 +20,16 @@ interface MovieDBService {
     ): MovieList
 
     @GET("movie/{movie_id}")
-    fun requestForMovie(
+    suspend fun requestForMovie(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
-    ): Single<Movie>
+    ):  Movie
 
     @GET("movie/{movie_id}/credits")
-    fun requestForGetCredits(
+    suspend fun requestForGetCredits(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
-    ): Single<CreditResponse>
+    ): CreditResponse
 
     @GET("genre/{genre_id}/movies")
     fun requestForGenreMovies(
