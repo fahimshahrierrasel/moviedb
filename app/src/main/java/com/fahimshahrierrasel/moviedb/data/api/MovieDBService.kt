@@ -13,20 +13,20 @@ interface MovieDBService {
     ): Single<MovieGenre>
 
     @GET("movie/{keyword}")
-    suspend fun requestForMovieList(
+    suspend fun listMovies(
         @Path("keyword") keyword: String,
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
+        @Query("api_key") apiKey: String
     ): MovieList
 
     @GET("movie/{movie_id}")
-    suspend fun requestForMovie(
+    suspend fun movieDetails(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
     ):  Movie
 
     @GET("movie/{movie_id}/credits")
-    suspend fun requestForGetCredits(
+    suspend fun movieCasts(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
     ): CreditResponse
@@ -52,20 +52,20 @@ interface MovieDBService {
 
     @GET("search/movie")
     fun requestForSearchMovies(
-        @Query("api_key") apiKey: String,
         @Query("query") query: String,
+        @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
     ): Single<MovieList>
 
 
     @GET("person/popular")
-    fun requestForPopularPersons(
+    suspend fun popularActors(
         @Query("api_key") apiKey: String,
-        @Query("page") page: Int = 1
-    ): Single<PersonResponse>
+        @Query("page") page: Int
+    ): PersonResponse
 
     @GET("person/{person_id}")
-    fun requestForPersonDetails(
+    fun actorDetails(
         @Path("person_id") personId: Int,
         @Query("api_key") apiKey: String
     ): Single<Person>

@@ -1,7 +1,6 @@
 package com.fahimshahrierrasel.moviedb.ui.person_details
 
 import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
-import com.fahimshahrierrasel.moviedb.data.model.CreditResponse
 import com.fahimshahrierrasel.moviedb.data.model.Person
 import com.fahimshahrierrasel.moviedb.data.model.PersonCreditResponse
 import com.fahimshahrierrasel.moviedb.helper.apiKey
@@ -22,7 +21,7 @@ class PersonDetailsPresenter(private val personDetailsView: PersonDetailsContrac
     private val compositeDisposable = CompositeDisposable()
 
     override fun getPersonDetails(personId: Int) {
-        ApiUtils.movieDBService.requestForPersonDetails(personId, apiKey)
+        ApiUtils.movieDBService.actorDetails(personId, apiKey)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<Person> {

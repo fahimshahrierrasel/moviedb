@@ -19,14 +19,13 @@ import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
 import com.fahimshahrierrasel.moviedb.ui.genres.GenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
-import com.fahimshahrierrasel.moviedb.ui.person.PersonFragment
-import com.fahimshahrierrasel.moviedb.ui.person.PersonPresenter
 import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsPresenter
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
 import com.fahimshahrierrasel.moviedb.ui.views.MovieDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.views.MovieListFragment
+import com.fahimshahrierrasel.moviedb.ui.views.PersonListFragment
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -174,12 +173,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openPersonFragment() {
-        val personFragment = PersonFragment.newInstance(Bundle())
+        val personListFragment = PersonListFragment.newInstance(Bundle())
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_fragment_placeholder, personFragment)
+            replace(R.id.main_fragment_placeholder, personListFragment)
         }.commit()
-
-        PersonPresenter(personFragment)
     }
 
     private fun openAboutFragment() {
