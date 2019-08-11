@@ -1,6 +1,8 @@
 package com.fahimshahrierrasel.moviedb.data
 
 import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
+import com.fahimshahrierrasel.moviedb.data.model.Person
+import com.fahimshahrierrasel.moviedb.data.model.PersonCreditResponse
 import com.fahimshahrierrasel.moviedb.helper.apiKey
 
 class MovieRepositoryImpl : MovieRepository {
@@ -13,6 +15,12 @@ class MovieRepositoryImpl : MovieRepository {
     override suspend fun getMovieCredits(movieId: Int) =
         ApiUtils.movieDBService.movieCasts(apiKey = apiKey, movieId = movieId)
 
-    override suspend fun getPopularPersons(pageNo: Int) =
+    override suspend fun getPopularActors(pageNo: Int) =
         ApiUtils.movieDBService.popularActors(apiKey = apiKey, page = pageNo)
+
+    override suspend fun getActorDetails(actorId: Int): Person =
+        ApiUtils.movieDBService.actorDetails(actorId, apiKey)
+
+    override suspend fun getActorMovies(actorId: Int): PersonCreditResponse =
+        ApiUtils.movieDBService.actorMovies(actorId, apiKey)
 }

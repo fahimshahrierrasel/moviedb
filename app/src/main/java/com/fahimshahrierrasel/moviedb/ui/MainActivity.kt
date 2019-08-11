@@ -20,12 +20,12 @@ import com.fahimshahrierrasel.moviedb.ui.genres.GenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsFragment
-import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsPresenter
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
+import com.fahimshahrierrasel.moviedb.ui.views.ActorDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.views.MovieDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.views.MovieListFragment
-import com.fahimshahrierrasel.moviedb.ui.views.PersonListFragment
+import com.fahimshahrierrasel.moviedb.ui.views.ActorListFragment
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openPersonFragment() {
-        val personListFragment = PersonListFragment.newInstance(Bundle())
+        val personListFragment = ActorListFragment.newInstance(Bundle())
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, personListFragment)
         }.commit()
@@ -222,12 +222,11 @@ class MainActivity : AppCompatActivity() {
     fun openPersonDetails(personId: Int) {
         val bundle = Bundle()
         bundle.putInt(PERSON_ID, personId)
-        val personDetailsFragment = PersonDetailsFragment.newInstance(bundle)
+        val personDetailsFragment = ActorDetailsFragment.newInstance(bundle)
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, personDetailsFragment)
             addToBackStack(null)
         }.commit()
-        PersonDetailsPresenter(personDetailsFragment)
     }
 
     override fun onDestroy() {

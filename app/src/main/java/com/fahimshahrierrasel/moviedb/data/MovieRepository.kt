@@ -1,13 +1,12 @@
 package com.fahimshahrierrasel.moviedb.data
 
-import com.fahimshahrierrasel.moviedb.data.model.CreditResponse
-import com.fahimshahrierrasel.moviedb.data.model.Movie
-import com.fahimshahrierrasel.moviedb.data.model.MovieList
-import com.fahimshahrierrasel.moviedb.data.model.PersonResponse
+import com.fahimshahrierrasel.moviedb.data.model.*
 
 interface MovieRepository {
     suspend fun getMovieList(keyword: String = "popular", pageNo: Int = 1): MovieList
     suspend fun getMovieDetails(movieId: Int): Movie
     suspend fun getMovieCredits(movieId: Int): CreditResponse
-    suspend fun getPopularPersons(pageNo: Int): PersonResponse
+    suspend fun getPopularActors(pageNo: Int): PersonResponse
+    suspend fun getActorDetails(actorId: Int): Person
+    suspend fun getActorMovies(actorId: Int): PersonCreditResponse
 }

@@ -17,7 +17,7 @@ import com.fahimshahrierrasel.moviedb.viewmodels.ActorViewModel
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_genres.*
 
-class PersonListFragment :BaseFragment() {
+class ActorListFragment :BaseFragment() {
     private lateinit var personAdapter: PersonAdapter
     private val personResults by lazy {
         ArrayList<PersonResult>()
@@ -29,7 +29,7 @@ class PersonListFragment :BaseFragment() {
     }
 
     companion object {
-        fun newInstance(bundle: Bundle) = PersonListFragment().apply {
+        fun newInstance(bundle: Bundle) = ActorListFragment().apply {
             arguments = bundle
         }
     }

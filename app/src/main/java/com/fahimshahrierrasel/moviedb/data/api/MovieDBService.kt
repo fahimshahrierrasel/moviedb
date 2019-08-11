@@ -65,16 +65,14 @@ interface MovieDBService {
     ): PersonResponse
 
     @GET("person/{person_id}")
-    fun actorDetails(
-        @Path("person_id") personId: Int,
+    suspend fun actorDetails(
+        @Path("person_id") actorId: Int,
         @Query("api_key") apiKey: String
-    ): Single<Person>
+    ): Person
 
     @GET("person/{person_id}/movie_credits")
-    fun requestForPersonMovies(
-        @Path("person_id") personId: Int,
+    suspend fun actorMovies(
+        @Path("person_id") actorId: Int,
         @Query("api_key") apiKey: String
-    ): Single<PersonCreditResponse>
-
-
+    ): PersonCreditResponse
 }
