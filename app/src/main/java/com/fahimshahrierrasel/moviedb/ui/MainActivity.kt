@@ -19,7 +19,6 @@ import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
 import com.fahimshahrierrasel.moviedb.ui.genres.GenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
-import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsFragment
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
 import com.fahimshahrierrasel.moviedb.ui.views.ActorDetailsFragment
