@@ -3,36 +3,29 @@ package com.fahimshahrierrasel.moviedb.ui
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
 import com.fahimshahrierrasel.moviedb.data.model.Genre
-import com.fahimshahrierrasel.moviedb.data.model.MovieGenre
 import com.fahimshahrierrasel.moviedb.helper.*
 import com.fahimshahrierrasel.moviedb.ui.about.AboutFragment
 import com.fahimshahrierrasel.moviedb.ui.about.AboutPresenter
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverFragment
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverPresenter
-import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
-import com.fahimshahrierrasel.moviedb.ui.genres.GenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
 import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
 import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
-import com.fahimshahrierrasel.moviedb.ui.views.ActorDetailsFragment
-import com.fahimshahrierrasel.moviedb.ui.views.MovieDetailsFragment
-import com.fahimshahrierrasel.moviedb.ui.views.MovieListFragment
-import com.fahimshahrierrasel.moviedb.ui.views.ActorListFragment
+import com.fahimshahrierrasel.moviedb.ui.views.*
+import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,29 +34,20 @@ class MainActivity : AppCompatActivity() {
     private val genres by lazy { ArrayList<Genre>() }
     private val compositeDisposable = CompositeDisposable()
 
+    private val movieViewModel by lazy {
+        ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MovieViewModel::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         Logger.addLogAdapter(AndroidLogAdapter())
 
-        ApiUtils.movieDBService.requestForMovieGenre(apiKey)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<MovieGenre> {
-                override fun onSuccess(t: MovieGenre) {
-                    genres.addAll(t.genres)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    compositeDisposable.add(d)
-                }
-
-                override fun onError(e: Throwable) {
-                    Logger.e(e.localizedMessage)
-                }
-            })
-
+        movieViewModel.getMovieGenres().observe(this, Observer { movieGenre ->
+            genres.clear()
+            genres.addAll(movieGenre.genres)
+        })
 
         // Initializing splash fragment
         val splashFragment = SplashFragment.newInstance(Bundle())
@@ -167,8 +151,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, genreFragment)
         }.commit()
-
-        GenrePresenter(genreFragment)
     }
 
     private fun openPersonFragment() {

@@ -8,9 +8,9 @@ import retrofit2.http.Query
 
 interface MovieDBService {
     @GET("genre/movie/list")
-    fun requestForMovieGenre(
+    suspend fun movieGenres(
         @Query("api_key") apiKey: String
-    ): Single<MovieGenre>
+    ): MovieGenre
 
     @GET("movie/{keyword}")
     suspend fun listMovies(

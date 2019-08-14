@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.fahimshahrierrasel.moviedb.data.MovieRepositoryImpl
 import com.fahimshahrierrasel.moviedb.data.model.CreditResponse
 import com.fahimshahrierrasel.moviedb.data.model.Movie
+import com.fahimshahrierrasel.moviedb.data.model.MovieGenre
 import com.fahimshahrierrasel.moviedb.data.model.MovieList
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +37,13 @@ class MovieViewModel : ViewModel() {
         return liveData(Dispatchers.IO) {
             val movieCasts = repository.getMovieCredits(movieId)
             emit(movieCasts)
+        }
+    }
+
+    fun getMovieGenres(): LiveData<MovieGenre> {
+        return liveData(Dispatchers.IO) {
+            val genres = repository.getMovieGenres()
+            emit(genres)
         }
     }
 
