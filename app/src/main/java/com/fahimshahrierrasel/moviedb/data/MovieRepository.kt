@@ -10,4 +10,5 @@ interface MovieRepository {
     suspend fun getPopularActors(pageNo: Int): PersonResponse
     suspend fun getActorDetails(actorId: Int): Person
     suspend fun getActorMovies(actorId: Int): PersonCreditResponse
+    suspend fun getGenreMovies(genreId: Int, pageNo: Int = 1): MovieList
 }

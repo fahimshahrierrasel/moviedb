@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
+import com.fahimshahrierrasel.moviedb.helper.GENRE_ID
+import com.fahimshahrierrasel.moviedb.helper.GENRE_NAME
 import com.fahimshahrierrasel.moviedb.helper.MOVIE_KEYWORD
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
 import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
@@ -39,7 +41,9 @@ class MovieListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieKeyword = arguments?.getString(MOVIE_KEYWORD, "popular")
+        val movieKeyword = arguments?.getString(MOVIE_KEYWORD)
+        val genreId = arguments?.getInt(GENRE_ID)
+        val genreName = arguments?.getString(GENRE_NAME)
 
         rv_movies.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         movieAdapter = MovieAdapter(movieResults)
@@ -48,20 +52,26 @@ class MovieListFragment : BaseFragment() {
             rootActivity.openMovieDetails(movieResults[position].id)
         }
 
-        movieViewModel.getMovieListWith(movieKeyword!!, currentPage)
+        if(movieKeyword != null)
+            movieViewModel.getMovieListWith(movieKeyword, currentPage)
+        else
+            movieViewModel.getGenreMovieListWith(genreId!!, currentPage)
 
         movieViewModel.movieList.observe(viewLifecycleOwner, Observer { movieList ->
             if(currentPage == 1)
-                movieResults.clear()
+            movieResults.clear()
             movieResults.addAll(movieList.movieResults)
             movieAdapter.notifyDataSetChanged()
             movieAdapter.loadMoreComplete()
-            this.currentPage = movieList.page
+            currentPage = movieList.page
         })
 
         movieAdapter.setOnLoadMoreListener({
             Logger.d("Change Current Page From $currentPage to ${currentPage + 1}")
-            movieViewModel.getMovieListWith(movieKeyword, currentPage + 1)
+            if(movieKeyword != null)
+                movieViewModel.getMovieListWith(movieKeyword, currentPage + 1)
+            else
+                movieViewModel.getGenreMovieListWith(genreId!!, currentPage + 1)
         }, rv_movies)
     }
 }

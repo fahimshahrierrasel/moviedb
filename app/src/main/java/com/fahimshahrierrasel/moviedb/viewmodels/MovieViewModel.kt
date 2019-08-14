@@ -26,6 +26,19 @@ class MovieViewModel : ViewModel() {
         }
     }
 
+    fun getGenreMovieListWith(genreId: Int, pageNumber: Int) {
+        Logger.d("Get Movie List With For Genre Id $genreId Page: $pageNumber ")
+        val liveData = liveData(Dispatchers.IO) {
+            val retriedMovieList = repository.getGenreMovies(genreId = genreId, pageNo = pageNumber)
+            emit(retriedMovieList)
+        }
+
+        movieList.addSource(liveData){
+            movieList.value = it
+            movieList.removeSource(liveData)
+        }
+    }
+
     fun getMovieDetails(movieId: Int): LiveData<Movie> {
         return liveData(Dispatchers.IO) {
             val movieDetails = repository.getMovieDetails(movieId)

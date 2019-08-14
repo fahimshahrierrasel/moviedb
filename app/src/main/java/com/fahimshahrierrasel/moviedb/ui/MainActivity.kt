@@ -1,7 +1,6 @@
 package com.fahimshahrierrasel.moviedb.ui
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -9,17 +8,12 @@ import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
-import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
 import com.fahimshahrierrasel.moviedb.data.model.Genre
 import com.fahimshahrierrasel.moviedb.helper.*
 import com.fahimshahrierrasel.moviedb.ui.about.AboutFragment
 import com.fahimshahrierrasel.moviedb.ui.about.AboutPresenter
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverFragment
 import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverPresenter
-import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
-import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
-import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
-import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
 import com.fahimshahrierrasel.moviedb.ui.views.*
 import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import com.mikepenz.materialdrawer.Drawer
@@ -183,12 +177,10 @@ class MainActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putInt(GENRE_ID, genre.id)
         bundle.putString(GENRE_NAME, genre.name)
-        val movieGenreFragment = MovieGenreFragment.newInstance(bundle)
+        val movieListFragment = MovieListFragment.newInstance(bundle)
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_fragment_placeholder, movieGenreFragment)
-            addToBackStack(null)
+            replace(R.id.main_fragment_placeholder, movieListFragment)
         }.commit()
-        MovieGenrePresenter(movieGenreFragment)
     }
 
     fun openPersonDetails(personId: Int) {

@@ -32,11 +32,11 @@ interface MovieDBService {
     ): CreditResponse
 
     @GET("genre/{genre_id}/movies")
-    fun requestForGenreMovies(
+    suspend fun genreMovies(
         @Path("genre_id") genreId: Int,
         @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
-    ): Single<MovieList>
+    ): MovieList
 
     @GET("discover/movie")
     fun requestForDiscoveredMovies(
