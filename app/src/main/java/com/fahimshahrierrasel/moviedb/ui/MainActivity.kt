@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -48,18 +49,8 @@ class MainActivity : AppCompatActivity() {
             genres.clear()
             genres.addAll(movieGenre.genres)
         })
-
-        // Initializing splash fragment
-        val splashFragment = SplashFragment.newInstance(Bundle())
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_fragment_placeholder, splashFragment)
-        }.commit()
-        SplashPresenter(splashFragment)
-
-        Handler().postDelayed({
-            openMovieList()
-            setDrawer()
-        }, 1000)
+        setDrawer()
+        openMovieList()
     }
 
     private fun setDrawer() {
