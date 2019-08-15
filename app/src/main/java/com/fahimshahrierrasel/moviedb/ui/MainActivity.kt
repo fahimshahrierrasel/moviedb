@@ -10,8 +10,6 @@ import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.Genre
 import com.fahimshahrierrasel.moviedb.helper.*
-import com.fahimshahrierrasel.moviedb.ui.about.AboutFragment
-import com.fahimshahrierrasel.moviedb.ui.about.AboutPresenter
 import com.fahimshahrierrasel.moviedb.ui.views.*
 import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import com.mikepenz.materialdrawer.Drawer
@@ -148,8 +146,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, aboutFragment)
         }.commit()
-
-        AboutPresenter(aboutFragment)
     }
 
     private fun openDiscoverFragment() {

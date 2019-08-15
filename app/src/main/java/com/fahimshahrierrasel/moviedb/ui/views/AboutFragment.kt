@@ -1,4 +1,4 @@
-package com.fahimshahrierrasel.moviedb.ui.about
+package com.fahimshahrierrasel.moviedb.ui.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +12,7 @@ import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_about.*
 
-class AboutFragment : Fragment(), AboutContract.View {
-    private lateinit var genrePresenter: AboutContract.Presenter
-    private lateinit var rootActivity: MainActivity
+class AboutFragment : BaseFragment() {
 
     companion object {
         fun newInstance(bundle: Bundle) = AboutFragment().apply {
@@ -23,7 +21,6 @@ class AboutFragment : Fragment(), AboutContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootActivity = activity as MainActivity
         return inflater.inflate(R.layout.fragment_about, container, false)
     }
 
@@ -38,22 +35,5 @@ class AboutFragment : Fragment(), AboutContract.View {
             tv_github_url.text = this
         }
 
-    }
-
-    override fun showProgressView() {
-        rootActivity.progressView.show()
-    }
-
-    override fun hideProgressView() {
-        rootActivity.progressView.hide()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        genrePresenter.start()
-    }
-
-    override fun setPresenter(presenter: AboutContract.Presenter) {
-        genrePresenter = presenter
     }
 }
