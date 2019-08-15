@@ -16,11 +16,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movies"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:itemCount="1"
-        tools:listitem="@layout/item_movie">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_movie"/>
 
 </LinearLayout>
 

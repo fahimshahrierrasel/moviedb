@@ -2,44 +2,45 @@ package com.fahimshahrierrasel.moviedb.data.api
 
 import com.fahimshahrierrasel.moviedb.data.model.*
 import io.reactivex.Single
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieDBService {
     @GET("genre/movie/list")
-    fun requestForMovieGenre(
+    suspend fun movieGenres(
         @Query("api_key") apiKey: String
-    ): Single<MovieGenre>
+    ): MovieGenre
 
     @GET("movie/{keyword}")
-    fun requestForMovieList(
+    suspend fun listMovies(
         @Path("keyword") keyword: String,
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int = 1
-    ): Single<MovieList>
+        @Query("page") page: Int = 1,
+        @Query("api_key") apiKey: String
+    ): Response<MovieList>
 
     @GET("movie/{movie_id}")
-    fun requestForMovie(
+    suspend fun movieDetails(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
-    ): Single<Movie>
+    ): Movie
 
     @GET("movie/{movie_id}/credits")
-    fun requestForGetCredits(
+    suspend fun movieCasts(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
-    ): Single<CreditResponse>
+    ): CreditResponse
 
     @GET("genre/{genre_id}/movies")
-    fun requestForGenreMovies(
+    suspend fun genreMovies(
         @Path("genre_id") genreId: Int,
         @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
-    ): Single<MovieList>
+    ): MovieList
 
     @GET("discover/movie")
-    fun requestForDiscoveredMovies(
+    suspend fun requestForDiscoveredMovies(
         @Query("api_key") apiKey: String,
         @Query("primary_release_year") releaseYear: Int,
         @Query("vote_average.gte") voteAverageGte: Int,
@@ -48,33 +49,31 @@ interface MovieDBService {
         @Query("with_runtime.lte") runtimeLte: Int,
         @Query("sort_by") sortBy: String = "popularity.desc",
         @Query("page") page: Int = 1
-    ): Single<MovieList>
+    ): MovieList
 
     @GET("search/movie")
-    fun requestForSearchMovies(
-        @Query("api_key") apiKey: String,
+    suspend fun requestForSearchMovies(
         @Query("query") query: String,
+        @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
-    ): Single<MovieList>
+    ): MovieList
 
 
     @GET("person/popular")
-    fun requestForPopularPersons(
+    suspend fun popularActors(
         @Query("api_key") apiKey: String,
-        @Query("page") page: Int = 1
-    ): Single<PersonResponse>
+        @Query("page") page: Int
+    ): PersonResponse
 
     @GET("person/{person_id}")
-    fun requestForPersonDetails(
-        @Path("person_id") personId: Int,
+    suspend fun actorDetails(
+        @Path("person_id") actorId: Int,
         @Query("api_key") apiKey: String
-    ): Single<Person>
+    ): Person
 
     @GET("person/{person_id}/movie_credits")
-    fun requestForPersonMovies(
-        @Path("person_id") personId: Int,
+    suspend fun actorMovies(
+        @Path("person_id") actorId: Int,
         @Query("api_key") apiKey: String
-    ): Single<PersonCreditResponse>
-
-
+    ): PersonCreditResponse
 }
