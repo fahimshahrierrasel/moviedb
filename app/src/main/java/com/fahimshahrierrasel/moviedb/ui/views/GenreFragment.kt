@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.Genre
@@ -19,6 +20,8 @@ import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_genres.*
 
 class GenreFragment : BaseFragment() {
+    override val recyclerView: RecyclerView
+        get() = rv_genres
     private lateinit var genreAdapter: GenreAdapter
     private val genres = ArrayList<Genre>()
 

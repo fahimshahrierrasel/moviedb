@@ -25,6 +25,8 @@ import kotlinx.android.synthetic.main.content_movie.*
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 
 class MovieDetailsFragment : BaseFragment() {
+    override val recyclerView: RecyclerView
+        get() = rv_casts
 
     private lateinit var castAdapter: CastAdapter
     private val casts = ArrayList<CreditCast>()

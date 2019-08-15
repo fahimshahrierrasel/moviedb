@@ -20,6 +20,9 @@ import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 
 class MovieListFragment : BaseFragment() {
+    override val recyclerView: RecyclerView
+        get() = rv_movies
+
     private lateinit var movieAdapter: MovieAdapter
     private val movieResults = ArrayList<MovieResult>()
     private var currentPage = 1
@@ -51,15 +54,16 @@ class MovieListFragment : BaseFragment() {
         movieAdapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { _, _, position ->
             rootActivity.openMovieDetails(movieResults[position].id)
         }
+        movieAdapter.emptyView = loadingProgressView
 
-        if(movieKeyword != null)
+        if (movieKeyword != null)
             movieViewModel.getMovieListWith(movieKeyword, currentPage)
         else
             movieViewModel.getGenreMovieListWith(genreId!!, currentPage)
 
         movieViewModel.movieList.observe(viewLifecycleOwner, Observer { movieList ->
-            if(currentPage == 1)
-            movieResults.clear()
+            if (currentPage == 1)
+                movieResults.clear()
             movieResults.addAll(movieList.movieResults)
             movieAdapter.notifyDataSetChanged()
             movieAdapter.loadMoreComplete()
@@ -68,7 +72,7 @@ class MovieListFragment : BaseFragment() {
 
         movieAdapter.setOnLoadMoreListener({
             Logger.d("Change Current Page From $currentPage to ${currentPage + 1}")
-            if(movieKeyword != null)
+            if (movieKeyword != null)
                 movieViewModel.getMovieListWith(movieKeyword, currentPage + 1)
             else
                 movieViewModel.getGenreMovieListWith(genreId!!, currentPage + 1)

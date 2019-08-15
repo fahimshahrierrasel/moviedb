@@ -12,7 +12,7 @@ import com.fahimshahrierrasel.moviedb.ui.MainActivity
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_about.*
 
-class AboutFragment : BaseFragment() {
+class AboutFragment : Fragment() {
 
     companion object {
         fun newInstance(bundle: Bundle) = AboutFragment().apply {
@@ -34,6 +34,5 @@ class AboutFragment : BaseFragment() {
         GITHUB_URL.apply {
             tv_github_url.text = this
         }
-
     }
 }

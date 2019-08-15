@@ -16,8 +16,12 @@ import com.fahimshahrierrasel.moviedb.helper.SearchMode
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
 import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_discover.*
+import kotlinx.android.synthetic.main.fragment_discover.rv_movies
+import kotlinx.android.synthetic.main.fragment_discover.toolbar
 
 class DiscoverMoviesFragment : BaseFragment() {
+    override val recyclerView: RecyclerView
+        get() = rv_movies
     private lateinit var movieAdapter: MovieAdapter
     private val movies = ArrayList<MovieResult>()
     private var isAdvanceSearchShown = false

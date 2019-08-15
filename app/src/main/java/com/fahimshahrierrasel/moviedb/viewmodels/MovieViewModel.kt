@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 class MovieViewModel : ViewModel() {
     private val repository: MovieRepositoryImpl = MovieRepositoryImpl()
     val movieList = MediatorLiveData<MovieList>()
+    val errorMessage = MutableLiveData<String>()
 
     fun getMovieListWith(keyword: String, pageNumber: Int) {
         Logger.d("Get Movie List With For $keyword Page: $pageNumber ")
@@ -21,9 +22,16 @@ class MovieViewModel : ViewModel() {
         }
 
         movieList.addSource(liveData) {
-            movieList.value = it
+            Logger.d(it)
+            if(it.code() == 200)
+                movieList.value = it.body()
+            else {
+                Logger.d(it.errorBody())
+                errorMessage.value = it.message()
+            }
             movieList.removeSource(liveData)
         }
+
     }
 
     fun getGenreMovieListWith(genreId: Int, pageNumber: Int) {

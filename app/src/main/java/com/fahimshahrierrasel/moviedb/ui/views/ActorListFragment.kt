@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.PersonResult
@@ -18,6 +19,8 @@ import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_genres.*
 
 class ActorListFragment :BaseFragment() {
+    override val recyclerView: RecyclerView
+        get() = rv_genres
     private lateinit var personAdapter: PersonAdapter
     private val personResults by lazy {
         ArrayList<PersonResult>()

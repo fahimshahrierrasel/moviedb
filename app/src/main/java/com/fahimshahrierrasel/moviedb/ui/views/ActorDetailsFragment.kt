@@ -22,6 +22,8 @@ import kotlinx.android.synthetic.main.content_person.*
 import kotlinx.android.synthetic.main.fragment_person_details.*
 
 class ActorDetailsFragment : BaseFragment() {
+    override val recyclerView: RecyclerView
+        get() = rv_person_movies
     private lateinit var movieAdapter: PersonMovieAdapter
     private val casts = ArrayList<Cast>()
 

@@ -2,6 +2,7 @@ package com.fahimshahrierrasel.moviedb.data.api
 
 import com.fahimshahrierrasel.moviedb.data.model.*
 import io.reactivex.Single
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,13 +18,13 @@ interface MovieDBService {
         @Path("keyword") keyword: String,
         @Query("page") page: Int = 1,
         @Query("api_key") apiKey: String
-    ): MovieList
+    ): Response<MovieList>
 
     @GET("movie/{movie_id}")
     suspend fun movieDetails(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
-    ):  Movie
+    ): Movie
 
     @GET("movie/{movie_id}/credits")
     suspend fun movieCasts(
