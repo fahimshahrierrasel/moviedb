@@ -1,42 +1,21 @@
 package com.fahimshahrierrasel.moviedb.ui
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
 import com.fahimshahrierrasel.moviedb.R
-import com.fahimshahrierrasel.moviedb.data.api.ApiUtils
 import com.fahimshahrierrasel.moviedb.data.model.Genre
-import com.fahimshahrierrasel.moviedb.data.model.MovieGenre
 import com.fahimshahrierrasel.moviedb.helper.*
-import com.fahimshahrierrasel.moviedb.ui.about.AboutFragment
-import com.fahimshahrierrasel.moviedb.ui.about.AboutPresenter
-import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverFragment
-import com.fahimshahrierrasel.moviedb.ui.discover.DiscoverPresenter
-import com.fahimshahrierrasel.moviedb.ui.genres.GenreFragment
-import com.fahimshahrierrasel.moviedb.ui.genres.GenrePresenter
-import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsFragment
-import com.fahimshahrierrasel.moviedb.ui.movie_details.MovieDetailsPresenter
-import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenreFragment
-import com.fahimshahrierrasel.moviedb.ui.movie_genre.MovieGenrePresenter
-import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListFragment
-import com.fahimshahrierrasel.moviedb.ui.movie_list.MovieListPresenter
-import com.fahimshahrierrasel.moviedb.ui.person.PersonFragment
-import com.fahimshahrierrasel.moviedb.ui.person.PersonPresenter
-import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsFragment
-import com.fahimshahrierrasel.moviedb.ui.person_details.PersonDetailsPresenter
-import com.fahimshahrierrasel.moviedb.ui.splash.SplashFragment
-import com.fahimshahrierrasel.moviedb.ui.splash.SplashPresenter
+import com.fahimshahrierrasel.moviedb.ui.views.*
+import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import com.mikepenz.materialdrawer.Drawer
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,41 +24,23 @@ class MainActivity : AppCompatActivity() {
     private val genres by lazy { ArrayList<Genre>() }
     private val compositeDisposable = CompositeDisposable()
 
+    private val movieViewModel by lazy {
+        ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MovieViewModel::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         Logger.addLogAdapter(AndroidLogAdapter())
 
-        ApiUtils.movieDBService.requestForMovieGenre(apiKey)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<MovieGenre> {
-                override fun onSuccess(t: MovieGenre) {
-                    genres.addAll(t.genres)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    compositeDisposable.add(d)
-                }
-
-                override fun onError(e: Throwable) {
-                    Logger.e(e.localizedMessage)
-                }
-            })
-
-
-        // Initializing splash fragment
-        val splashFragment = SplashFragment.newInstance(Bundle())
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_fragment_placeholder, splashFragment)
-        }.commit()
-        SplashPresenter(splashFragment)
-
-        Handler().postDelayed({
-            openMovieList()
-            setDrawer()
-        }, 3000)
+        movieViewModel.getMovieGenres().observe(this, Observer { movieGenre ->
+            genres.clear()
+            genres.addAll(movieGenre.genres)
+        })
+        setDrawer()
+        openMovieList()
     }
 
     private fun setDrawer() {
@@ -164,8 +125,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, popularFragment)
         }.commit()
-
-        MovieListPresenter(popularFragment)
     }
 
     private fun openGenreFragment() {
@@ -173,17 +132,13 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, genreFragment)
         }.commit()
-
-        GenrePresenter(genreFragment)
     }
 
     private fun openPersonFragment() {
-        val personFragment = PersonFragment.newInstance(Bundle())
+        val personListFragment = ActorListFragment.newInstance(Bundle())
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_fragment_placeholder, personFragment)
+            replace(R.id.main_fragment_placeholder, personListFragment)
         }.commit()
-
-        PersonPresenter(personFragment)
     }
 
     private fun openAboutFragment() {
@@ -191,17 +146,13 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, aboutFragment)
         }.commit()
-
-        AboutPresenter(aboutFragment)
     }
 
     private fun openDiscoverFragment() {
-        val discoverFragment = DiscoverFragment.newInstance(Bundle())
+        val discoverFragment = DiscoverMoviesFragment.newInstance(Bundle())
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, discoverFragment)
         }.commit()
-
-        DiscoverPresenter(discoverFragment)
     }
 
     fun openMovieDetails(movieId: Int) {
@@ -212,30 +163,26 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.main_fragment_placeholder, movieDetailsFragment)
             addToBackStack(null)
         }.commit()
-        MovieDetailsPresenter(movieDetailsFragment)
     }
 
     fun openGenreMovies(genre: Genre) {
         val bundle = Bundle()
         bundle.putInt(GENRE_ID, genre.id)
         bundle.putString(GENRE_NAME, genre.name)
-        val movieGenreFragment = MovieGenreFragment.newInstance(bundle)
+        val movieListFragment = MovieListFragment.newInstance(bundle)
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_fragment_placeholder, movieGenreFragment)
-            addToBackStack(null)
+            replace(R.id.main_fragment_placeholder, movieListFragment)
         }.commit()
-        MovieGenrePresenter(movieGenreFragment)
     }
 
     fun openPersonDetails(personId: Int) {
         val bundle = Bundle()
         bundle.putInt(PERSON_ID, personId)
-        val personDetailsFragment = PersonDetailsFragment.newInstance(bundle)
+        val personDetailsFragment = ActorDetailsFragment.newInstance(bundle)
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_fragment_placeholder, personDetailsFragment)
             addToBackStack(null)
         }.commit()
-        PersonDetailsPresenter(personDetailsFragment)
     }
 
     override fun onDestroy() {

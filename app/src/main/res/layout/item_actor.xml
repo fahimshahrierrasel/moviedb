@@ -5,25 +5,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/genre_card"
+    android:layout_margin="3dp"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:gravity="center"
+        android:layout_height="200dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_genre_name"
+        <ImageView
+            android:id="@+id/iv_actor_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/chris_evans" />
+
+        <TextView
+            android:id="@+id/tv_actor_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#C8FAFAFA"
             android:gravity="center"
-            android:padding="15dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:padding="3dp"
             tools:text="@tools:sample/full_names" />
-    </LinearLayout>
+    </FrameLayout>
 </com.google.android.material.card.MaterialCardView>

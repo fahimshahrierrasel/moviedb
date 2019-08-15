@@ -5,7 +5,8 @@
 
 #### Dependencies
 * Logger
-* RXJava2, RXAndroid and RXKotlin
+* RXJava2, RXAndroid and RXKotlin (For MVP)
+* Co-routine, LiveData, ViewModel (for MVVM)  
 * Retrofit 2, GSON
 * Glide
 * MaterialDrawer

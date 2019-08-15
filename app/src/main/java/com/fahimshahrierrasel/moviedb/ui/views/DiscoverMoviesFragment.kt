@@ -1,40 +1,51 @@
-package com.fahimshahrierrasel.moviedb.ui.discover
+package com.fahimshahrierrasel.moviedb.ui.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.fahimshahrierrasel.moviedb.R
 import com.fahimshahrierrasel.moviedb.data.model.MovieResult
-import com.fahimshahrierrasel.moviedb.ui.MainActivity
+import com.fahimshahrierrasel.moviedb.helper.SearchMode
 import com.fahimshahrierrasel.moviedb.ui.adapters.MovieAdapter
-import com.orhanobut.logger.Logger
+import com.fahimshahrierrasel.moviedb.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_discover.*
 import kotlinx.android.synthetic.main.fragment_discover.rv_movies
 import kotlinx.android.synthetic.main.fragment_discover.toolbar
-import kotlinx.android.synthetic.main.fragment_movie_list.*
 
-class DiscoverFragment : Fragment(), DiscoverContract.View {
-    private lateinit var discoverPresenter: DiscoverContract.Presenter
+class DiscoverMoviesFragment : BaseFragment() {
+    override val recyclerView: RecyclerView
+        get() = rv_movies
     private lateinit var movieAdapter: MovieAdapter
     private val movies = ArrayList<MovieResult>()
-    private lateinit var rootActivity: MainActivity
     private var isAdvanceSearchShown = false
+    private var currentPage = 1
+    private var totalPage = 1
+    private var searchMode = SearchMode.NORMAL
+    private var year = "2019"
+    private var runtimeLte = 70
+    private var runtimeGte = 200
+    private var voteLte = 5
+    private var voteGte = 10
+    private var query = ""
 
     companion object {
-        fun newInstance(bundle: Bundle) = DiscoverFragment().apply {
+        fun newInstance(bundle: Bundle) = DiscoverMoviesFragment().apply {
             arguments = bundle
         }
     }
 
+    private val movieViewModel by lazy {
+        ViewModelProvider(rootActivity, ViewModelProvider.NewInstanceFactory()).get(MovieViewModel::class.java)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootActivity = activity as MainActivity
         return inflater.inflate(R.layout.fragment_discover, container, false)
     }
 
@@ -55,19 +66,19 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
         // setting default movie rating
         rs_rating.getThumb(0).value = 5
         rs_rating.getThumb(1).value = 10
-        tv_rating.text = "Rating: 5 - 10"
+        tv_rating.text = getString(R.string.rating_label, 5, 10)
 
-        // setting defult movie duration
+        // setting default movie duration
         rs_duration.getThumb(0).value = 70
         rs_duration.getThumb(1).value = 200
-        tv_duration.text = "Duration: 70 - 200"
+        tv_duration.text = getString(R.string.duration_label, 70, 200)
 
         // rating slider change listener
         rs_rating.setOnThumbValueChangeListener { multiSlider, _, _, _ ->
             val min = multiSlider.getThumb(0).value
             val max = multiSlider.getThumb(1).value
 
-            tv_rating.text = "Rating: $min - $max"
+            tv_rating.text = getString(R.string.rating_label, min, max)
         }
 
         // duration slider change listener
@@ -75,7 +86,7 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
             val min = multiSlider.getThumb(0).value
             val max = multiSlider.getThumb(1).value
 
-            tv_duration.text = "Duration: $min - $max"
+            tv_duration.text = getString(R.string.duration_label, min, max)
         }
 
         // populating year spinner
@@ -83,24 +94,37 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
         for (year in 2019 downTo 1901 step 1)
             years.add(year.toString())
 
-        val yearAdapter = ArrayAdapter<String>(rootActivity, android.R.layout.simple_spinner_dropdown_item, years)
+        val yearAdapter = ArrayAdapter(rootActivity, android.R.layout.simple_spinner_dropdown_item, years)
         spinner_year.adapter = yearAdapter
 
         // Search button click listener
         btn_search.setOnClickListener {
-            val query = et_movie_name.text.toString()
-            discoverPresenter.searchMovies(query)
+            searchMode = SearchMode.NORMAL
+            currentPage = 1
+
+            query = et_movie_name.text.toString()
+            movieViewModel.getSearchedMovies(query, currentPage)
         }
 
         // advance search button click listener
         btn_advance_search.setOnClickListener {
-            val voteGte = rs_rating.getThumb(0).value
-            val voteLte = rs_rating.getThumb(1).value
-            val runtimeGte = rs_duration.getThumb(0).value
-            val runtimeLte = rs_duration.getThumb(1).value
-            val year = spinner_year.selectedItem.toString()
+            searchMode = SearchMode.NORMAL
+            currentPage = 1
 
-            discoverPresenter.discoverMovies(year.toInt(), voteGte, voteLte, runtimeGte, runtimeLte)
+            voteGte = rs_rating.getThumb(0).value
+            voteLte = rs_rating.getThumb(1).value
+            runtimeGte = rs_duration.getThumb(0).value
+            runtimeLte = rs_duration.getThumb(1).value
+            year = spinner_year.selectedItem.toString()
+
+            movieViewModel.getAdvancedSearchedMovies(
+                releaseYear = year.toInt(),
+                voteGte = voteGte,
+                voteLte = voteLte,
+                runtimeGte = runtimeGte,
+                runtimeLte = runtimeLte,
+                pageNumber = currentPage
+            )
         }
 
         // setting movie recycler view
@@ -113,49 +137,31 @@ class DiscoverFragment : Fragment(), DiscoverContract.View {
 
         // load more movie event
         movieAdapter.setOnLoadMoreListener({
-            discoverPresenter.loadNextPage()
+            if (totalPage <= currentPage)
+                return@setOnLoadMoreListener
+
+            when (searchMode) {
+                SearchMode.NORMAL -> movieViewModel.getSearchedMovies(query, currentPage + 1)
+                SearchMode.ADVANCE -> movieViewModel.getAdvancedSearchedMovies(
+                    releaseYear = year.toInt(),
+                    voteGte = voteGte,
+                    voteLte = voteLte,
+                    runtimeGte = runtimeGte,
+                    runtimeLte = runtimeLte,
+                    pageNumber = currentPage + 1
+                )
+            }
         }, rv_movies)
-    }
-
-    override fun stopLoadMore() {
-        movieAdapter.loadMoreComplete()
-    }
-
-    override fun noLoadMore() {
-        movieAdapter.loadMoreEnd()
-    }
 
 
-    override fun showProgressView() {
-        rootActivity.progressView.show()
-    }
-
-    override fun hideProgressView() {
-        rootActivity.progressView.hide()
-    }
-
-    override fun showInputWarning(message: String) {
-        Toast.makeText(rootActivity, message, Toast.LENGTH_LONG).show()
-    }
-
-    override fun appendDiscoveredMovies(movieResults: List<MovieResult>) {
-        movies.addAll(movieResults)
-        movieAdapter.notifyDataSetChanged()
-    }
-
-    override fun addDiscoveredMovies(movieResults: List<MovieResult>) {
-        movies.clear()
-        movies.addAll(movieResults)
-        movieAdapter.notifyDataSetChanged()
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        discoverPresenter.start()
-    }
-
-    override fun setPresenter(presenter: DiscoverContract.Presenter) {
-        discoverPresenter = presenter
+        movieViewModel.movieList.observe(viewLifecycleOwner, Observer { movieList ->
+            totalPage = movieList.totalPages
+            currentPage = movieList.page
+            if (currentPage == 1)
+                movies.clear()
+            movies.addAll(movieList.movieResults)
+            movieAdapter.notifyDataSetChanged()
+            movieAdapter.loadMoreComplete()
+        })
     }
 }

@@ -12,4 +12,6 @@
     <string name="known_for">Known for</string>
     <string name="overview">Overview</string>
     <string name="top_billed_cast">Top Billed Cast</string>
+    <string name="rating_label">Rating: %1$d – %2$d</string>
+    <string name="duration_label">Duration: %1$d – %2$d</string>
 </resources>
