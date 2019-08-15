@@ -30,4 +30,26 @@ class MovieRepositoryImpl : MovieRepository {
 
     override suspend fun getActorMovies(actorId: Int): PersonCreditResponse =
         ApiUtils.movieDBService.actorMovies(actorId, apiKey)
+
+    override suspend fun searchMovies(query: String, pageNo: Int): MovieList =
+        ApiUtils.movieDBService.requestForSearchMovies(
+            apiKey = apiKey, query = query, page = pageNo
+        )
+
+    override suspend fun advanceSearch(
+        releaseYear: Int,
+        voteGte: Int,
+        voteLte: Int,
+        runtimeGte: Int,
+        runtimeLte: Int,
+        pageNo: Int
+    ): MovieList = ApiUtils.movieDBService.requestForDiscoveredMovies(
+        apiKey = apiKey,
+        releaseYear = releaseYear,
+        voteAverageGte = voteGte,
+        voteAverageLte = voteLte,
+        runtimeGte = runtimeGte,
+        runtimeLte = runtimeLte,
+        page = pageNo
+    )
 }

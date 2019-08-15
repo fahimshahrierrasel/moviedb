@@ -19,3 +19,8 @@ const val GENRE_NAME = "GENRE_NAME"
 const val MOVIE_KEYWORD = "MOVIE_KEYWORD"
 
 val cardColors = listOf("#00BCD4", "#03A9F4", "#00E676", "#FFEB3B", "#FFC400", "#FFC400", "#FF3D00")
+
+enum class SearchMode {
+    NORMAL,
+    ADVANCE
+}

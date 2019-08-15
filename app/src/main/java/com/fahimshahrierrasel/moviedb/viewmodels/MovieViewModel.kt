@@ -20,7 +20,7 @@ class MovieViewModel : ViewModel() {
             emit(retriedMovieList)
         }
 
-        movieList.addSource(liveData){
+        movieList.addSource(liveData) {
             movieList.value = it
             movieList.removeSource(liveData)
         }
@@ -33,7 +33,49 @@ class MovieViewModel : ViewModel() {
             emit(retriedMovieList)
         }
 
-        movieList.addSource(liveData){
+        movieList.addSource(liveData) {
+            movieList.value = it
+            movieList.removeSource(liveData)
+        }
+    }
+
+    fun getSearchedMovies(query: String, pageNumber: Int) {
+        Logger.d("Get Movie List With For Query $query Page: $pageNumber ")
+        val liveData = liveData(Dispatchers.IO) {
+            val retriedMovieList = repository.searchMovies(query = query, pageNo = pageNumber)
+            emit(retriedMovieList)
+        }
+
+        movieList.addSource(liveData) {
+            movieList.value = it
+            movieList.removeSource(liveData)
+        }
+    }
+
+    fun getAdvancedSearchedMovies(
+        releaseYear: Int,
+        voteGte: Int,
+        voteLte: Int,
+        runtimeGte: Int,
+        runtimeLte: Int,
+        pageNumber: Int
+    ) {
+        Logger.d("Get Movie List With For Release Year: $releaseYear, VoteGTE: $voteGte, VoteLTE: $voteLte, RuntimeGTE: $runtimeGte, RuntimeLTE: $runtimeLte, Page: $pageNumber ")
+        val liveData = liveData(Dispatchers.IO) {
+            val retriedMovieList = repository.advanceSearch(
+                releaseYear = releaseYear,
+                voteGte = voteGte,
+                voteLte = voteLte,
+                runtimeGte = runtimeGte,
+                runtimeLte = runtimeLte,
+                pageNo = pageNumber
+            )
+
+
+            emit(retriedMovieList)
+        }
+
+        movieList.addSource(liveData) {
             movieList.value = it
             movieList.removeSource(liveData)
         }
